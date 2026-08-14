@@ -19,6 +19,24 @@ st.markdown("""
     margin: 0;
     padding: 0;
     }
+
+
+    /* Top Navigation Bar Styling */
+    .navbar {
+        background-color: #0b3c85;
+        padding: 12px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #d4af37;
+    }
+    .nav-brand {
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 600;
+        font-family: serif;}
+    
     .main-header {
         font-size: 1.375rem;
         color: #0A2B7A;
@@ -41,5 +59,35 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<div class='main-header'>🌾 Ghanaian Rice Germplasm Intelligence Hub</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-header'>Enter early-stage growth measurements — get instant predictions on variety, traits, and stress classification</div>", unsafe_allow_html=True)
+
+
+av_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
+
+with nav_col1:
+    st.markdown("<div style='background-color:#0b3c85; padding:12px; font-size:1.2rem; font-weight:600; color:white; font-family:serif;'>GhanaRice ML</div>", unsafe_allow_html=True)
+
+with nav_col2:
+    if st.button("Home", key="btn_home", use_container_width=True, type="primary" if st.session_state['page'] == 'Home' else "secondary"):
+        set_page("Home")
+        st.rerun()
+
+with nav_col3:
+    if st.button("Predict", key="btn_predict", use_container_width=True, type="primary" if st.session_state['page'] == 'Predict' else "secondary"):
+        set_page("Predict")
+        st.rerun()
+
+with nav_col4:
+    if st.button("Batch", key="btn_batch", use_container_width=True, type="primary" if st.session_state['page'] == 'Batch' else "secondary"):
+        set_page("Batch")
+        st.rerun()
+
+with nav_col5:
+    if st.button("Dashboard", key="btn_dashboard", use_container_width=True, type="primary" if st.session_state['page'] == 'Dashboard' else "secondary"):
+        set_page("Dashboard")
+        st.rerun()
+
+st.markdown("<div style='border-bottom: 2px solid #d4af37; margin-bottom: 25px;'></div>", unsafe_allow_html=True)
+
+if st.session_state['page'] == 'Home':
+  st.markdown("<div class='main-header'>🌾 Ghanaian Rice Germplasm Intelligence Hub</div>", unsafe_allow_html=True)
+  st.markdown("<div class='sub-header'>Enter early-stage growth measurements — get instant predictions on variety, traits, and stress classification</div>", unsafe_allow_html=True)
