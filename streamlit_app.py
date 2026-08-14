@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-st.title('🎈 Ghanaian Rice Germplasm ML Predictor')
 
 st.set_page_config(
     page_title="Ghanaian Rice Germplasm Intelligence Hub",
@@ -14,18 +13,24 @@ st.set_page_config(
 # Custom Styling
 st.markdown("""
     <style>
+
+    * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    }
     .main-header {
         font-size: 1.375rem;
         color: #0A2B7A;
         font-weight: 500;
         text-align: center;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.375rem;
     }
     .sub-header {
         font-size: 1.1rem;
         color: var(--text-secondary);
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
     }
     .metric-card {
         background-color: #f8f9fa;
