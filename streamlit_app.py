@@ -15,15 +15,15 @@ st.set_page_config(
 st.markdown("""
     <style>
     .main-header {
-        font-size: 2.2rem;
-        color: #1b4332;
-        font-weight: 700;
+        font-size: 1.375rem;
+        color: #0A2B7A;
+        font-weight: 500;
         text-align: center;
         margin-bottom: 0.5rem;
     }
     .sub-header {
         font-size: 1.1rem;
-        color: #40916c;
+        color: var(--text-secondary);
         text-align: center;
         margin-bottom: 2rem;
     }
@@ -37,4 +37,4 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("<div class='main-header'>🌾 Ghanaian Rice Germplasm Intelligence Hub</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-header'>Precision Classification, Trait Prediction & Stress Detection System</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-header'>Enter early-stage growth measurements — get instant predictions on variety, traits, and stress classification</div>", unsafe_allow_html=True)
