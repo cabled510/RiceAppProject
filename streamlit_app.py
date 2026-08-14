@@ -13,10 +13,11 @@ st.set_page_config(
 # Custom Styling
 st.markdown("""
     <style>
-    * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    .block-container {
+        padding-top: 0rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
     }
 
     /* Top Navigation Bar Styling */
@@ -58,7 +59,12 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+if 'page' not in st.session_state:
+    st.session_state['page'] = 'Home'
 
+# Helper function to switch pages
+def set_page(page_name):
+    st.session_state['page'] = page_name
 
 nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
 
