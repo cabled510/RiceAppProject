@@ -13,13 +13,11 @@ st.set_page_config(
 # Custom Styling
 st.markdown("""
     <style>
-
     * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     }
-
 
     /* Top Navigation Bar Styling */
     .navbar {
@@ -35,7 +33,8 @@ st.markdown("""
         color: white;
         font-size: 1.2rem;
         font-weight: 600;
-        font-family: serif;}
+        font-family: serif;
+    }
     
     .main-header {
         font-size: 1.375rem;
