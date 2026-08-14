@@ -13,12 +13,6 @@ st.set_page_config(
 # Custom Styling
 st.markdown("""
     <style>
-    .block-container {
-        padding-top: 0rem !important;
-        padding-bottom: 2rem !important;
-        padding-left: 2rem !important;
-        padding-right: 2rem !important;
-    }
 
     /* Top Navigation Bar Styling */
     .navbar {
@@ -94,5 +88,5 @@ with nav_col5:
 st.markdown("<div style='border-bottom: 2px solid #d4af37; margin-bottom: 25px;'></div>", unsafe_allow_html=True)
 
 if st.session_state['page'] == 'Home':
-  st.markdown("<div class='main-header'>🌾 Ghanaian Rice Germplasm Intelligence Hub</div>", unsafe_allow_html=True)
+  st.markdown("<div class='main-header'>🌾 Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
   st.markdown("<div class='sub-header'>Enter early-stage growth measurements — get instant predictions on variety, traits, and stress classification</div>", unsafe_allow_html=True)
