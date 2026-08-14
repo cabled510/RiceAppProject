@@ -61,7 +61,7 @@ st.markdown("""
 
 
 
-av_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
+nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
 
 with nav_col1:
     st.markdown("<div style='background-color:#0b3c85; padding:12px; font-size:1.2rem; font-weight:600; color:white; font-family:serif;'>GhanaRice ML</div>", unsafe_allow_html=True)
