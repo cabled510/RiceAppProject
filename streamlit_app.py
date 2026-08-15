@@ -44,9 +44,9 @@ st.markdown("""
 
     .nav-link {
         color: #d1d5db;
-        font-family: serif, 'Times New Roman', Times;
+        font-family: 'Times New Roman';
         font-size: 1.05rem;
-        text-decoration: none !important;
+        text-decoration: none;
         padding: 6px 18px;
         border-radius: 2px;
         transition: background-color 0.2s ease, color 0.2s ease;
@@ -136,10 +136,10 @@ st.markdown(f"""
     <div class="nav-wrapper">
         <div class="nav-brand">🌾 GhanaRice ML</div>
         <div class="nav-items">
-            <a class="nav-link {is_home}" href="?page=Home" target="_self">Home</a>
-            <a class="nav-link {is_predict}" href="?page=Predict" target="_self">Predict</a>
-            <a class="nav-link {is_batch}" href="?page=Batch" target="_self">Batch</a>
-            <a class="nav-link {is_dash}" href="?page=Dashboard" target="_self">Dashboard</a>
+            <a class="nav-link" href="?page=Home" target="_self">Home</a>
+            <a class="nav-link" href="?page=Predict" target="_self">Predict</a>
+            <a class="nav-link" href="?page=Batch" target="_self">Batch</a>
+            <a class="nav-link" href="?page=Dashboard" target="_self">Dashboard</a>
         </div>
     </div>
 """, unsafe_allow_html=True)
