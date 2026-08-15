@@ -336,9 +336,6 @@ st.markdown("</div>", unsafe_allow_html=True)
 elif st.session_state.get('page') == 'Predict':
     col_left, col_right = st.columns([1, 1], gap="large")
 
-    # -------------------------------------------------------------------------
-    # LEFT COLUMN: INPUT FORM
-    # -------------------------------------------------------------------------
     with col_left:
         st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
 
@@ -358,9 +355,6 @@ elif st.session_state.get('page') == 'Predict':
         # Run Prediction Primary Action Button
         run_pred = st.button("Run prediction", use_container_width=True)
 
-    # -------------------------------------------------------------------------
-    # RIGHT COLUMN: PREDICTION RESULTS CARDS
-    # -------------------------------------------------------------------------
     with col_right:
 
         # 1. Variety Prediction Card
