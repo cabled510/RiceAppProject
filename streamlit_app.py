@@ -244,7 +244,6 @@ st.markdown("""
         height: 2.8rem !important;
         margin-top: 15px;
     }
-
     </style>
 """, unsafe_allow_html=True)
 
