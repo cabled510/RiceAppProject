@@ -258,7 +258,7 @@ st.markdown(f"""
     <div class="nav-wrapper">
         <div class="nav-brand">🌾 GhanaRice ML</div>
         <div class="nav-items">
-           st.button("Home", on_click=set_page, args=("Home",), use_container_width=True) <div class="nav-link" target="_self">Home</div>
+            <div class="nav-link" href="?page="Home" target="_self">Home</div>
             <div class="nav-link" href="?page=Predict" target="_self">Predict</div>
             <div class="nav-link" href="?page=Batch" target="_self">Batch</div>
             <div class="nav-link" href="?page=Dashboard" target="_self">Dashboard</div>
