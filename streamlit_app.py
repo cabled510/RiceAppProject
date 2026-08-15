@@ -66,7 +66,7 @@ st.markdown("<div class='navbar'>", unsafe_allow_html=True)
 nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
 
 with nav_col1:
-    st.markdown("<div style= padding:12px; font-size:1.2rem; font-weight:600; color:white; font-family:serif;'>GhanaRice ML</div>", unsafe_allow_html=True)
+    st.markdown("<div style= font-size:1.2rem; font-weight:600;'>🌾 GhanaRice ML</div>", unsafe_allow_html=True)
 
 with nav_col2:
     if st.button("Home", key="btn_home", use_container_width=True, type="primary" if st.session_state['page'] == 'Home' else "secondary"):
@@ -91,5 +91,5 @@ with nav_col5:
 st.markdown("</div>", unsafe_allow_html=True)
 
 if st.session_state['page'] == 'Home':
-  st.markdown("<div class='main-header'>🌾 Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
+  st.markdown("<div class='main-header'> Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
   st.markdown("<div class='sub-header'>Enter early-stage growth measurements — get instant predictions on variety, traits, and stress classification</div>", unsafe_allow_html=True)
