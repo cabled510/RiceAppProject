@@ -25,29 +25,37 @@ st.markdown("""
         height: 48px;
     }
 
-    /* Style Streamlit buttons inside the navigation bar columns */
-    div[data-testid="stColumn"] button {
-        border-radius: 2px;
-        font-family: serif, 'Times New Roman';
-        font-size: 1rem;
-        height: 2.4rem;
-        margin-top: 2px;
-    }
-    
-    /* Primary (Active) Button Styling */
-    div[data-testid="stColumn"] button[kind="primary"] {
-        background-color: #274780 
+    .nav-brand {
         color: #ffffff;
-        border: none !important;
-        font-weight: 600 !important;
+        font-family: serif, 'Times New Roman', Times;
+        font-size: 1.35rem;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .nav-items {
+        display: flex;
+        align-items: center;
+        gap: 12px;
     }
 
 
-    div[data-testid="stColumn"] button[kind="secondary"]:hover {
-        color: #ffffff; 
-        background-color: rgba(255, 255, 255, 0.1) !important;
+    .nav-link {
+        color: #d1d5db;
+        font-family: serif, 'Times New Roman', Times;
+        font-size: 1.05rem;
+        text-decoration: none !important;
+        padding: 6px 18px;
+        border-radius: 2px;
+        transition: background-color 0.2s ease, color 0.2s ease;
     }
 
+    .nav-link:hover {
+        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.08);
+    }
     .main-header {
         font-size: 1.375rem;
         color: #0A2B7A;
@@ -124,41 +132,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-st.markdown("<div class='nav-wrapper'>", unsafe_allow_html=True)
+st.markdown(f"""
+    <div class="nav-wrapper">
+        <div class="nav-brand">🌾 GhanaRice ML</div>
+        <div class="nav-items">
+            <a class="nav-link {is_home}" href="?page=Home" target="_self">Home</a>
+            <a class="nav-link {is_predict}" href="?page=Predict" target="_self">Predict</a>
+            <a class="nav-link {is_batch}" href="?page=Batch" target="_self">Batch</a>
+            <a class="nav-link {is_dash}" href="?page=Dashboard" target="_self">Dashboard</a>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
 
-nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
 
-with nav_col1:
-    st.markdown("<div style= font-size:1.2rem; padding:16px; font-weight:600;'>🌾 GhanaRice ML</div>", unsafe_allow_html=True)
+st.markdown("<div style='padding: 0px 40px;'>", unsafe_allow_html=True)
 
-if 'page' not in st.session_state:
-    st.session_state['page'] = 'Home'
-
-# Helper function to switch pages
-def set_page(page_name):
-    st.session_state['page'] = page_name
-
-with nav_col2:
-    if st.button("Home", key="btn_home", use_container_width=True, type="primary" if st.session_state['page'] == 'Home' else "secondary"):
-        set_page("Home")
-        st.rerun()
-
-with nav_col3:
-    if st.button("Predict", key="btn_predict", use_container_width=True, type="primary" if st.session_state['page'] == 'Predict' else "secondary"):
-        set_page("Predict")
-        st.rerun()
-
-with nav_col4:
-    if st.button("Batch", key="btn_batch", use_container_width=True, type="primary" if st.session_state['page'] == 'Batch' else "secondary"):
-        set_page("Batch")
-        st.rerun()
-
-with nav_col5:
-    if st.button("Dashboard", key="btn_dashboard", use_container_width=True, type="primary" if st.session_state['page'] == 'Dashboard' else "secondary"):
-        set_page("Dashboard")
-        st.rerun()
-
-st.markdown("</div>", unsafe_allow_html=True)
 
 if st.session_state['page'] == 'Home':
   st.markdown("<div class='main-header'> Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
@@ -213,3 +201,6 @@ with c3:
                 <div class="feature-desc">View performance metrics and feature importance for all six trained algorithms</div>
             </div>
         """, unsafe_allow_html=True)
+
+
+st.markdown("</div>", unsafe_allow_html=True)
