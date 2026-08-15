@@ -142,7 +142,7 @@ st.markdown("""
         font-weight: 500;
         color: #111111;
         margin-bottom: 12px;
-        padding-left: 29px;
+
     }
     .variety-card {
         border-left: 3px solid #1a4380;
@@ -325,7 +325,7 @@ if st.session_state['page'] == 'Home':
 
 # --- PREDICT PAGE ---
 elif st.session_state['page'] == 'Predict':
-    col_left, col_right = st.columns([1, 1], gap="large")
+    col_left, col_right = st.columns([1, 1], gap="medium")
 
     with col_left:
         st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
