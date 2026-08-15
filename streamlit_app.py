@@ -7,7 +7,7 @@ st.set_page_config(
     page_title="Ghanaian Rice Germplasm Intelligence Hub",
     page_icon="🌾",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # Custom Styling
@@ -17,7 +17,7 @@ st.markdown("""
     /* Full-width dark blue navigation wrapper */
     .nav-wrapper {
         background-color: #0b2f6b;
-        padding: 10px 30px;
+        padding: 16px 20px;
         border-bottom: 2px solid #caa052;
         margin-bottom: 30px;
     }
@@ -39,12 +39,6 @@ st.markdown("""
         font-weight: 600 !important;
     }
 
-    /* Secondary (Inactive) Button Styling */
-    div[data-testid="stColumn"] button[kind="secondary"] {
-        background-color: transparent !important;
-        color: #d1d5db;
-        border: none !important;
-    }
 
     div[data-testid="stColumn"] button[kind="secondary"]:hover {
         color: #ffffff; 
