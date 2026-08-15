@@ -340,7 +340,7 @@ if st.session_state['page'] == 'Predict':
     
 with col_left:
     st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
-
+    
     accession = st.selectbox("Accession", ["AGRA", "ADDO1", "GH10887", "Togbei"], index=0)
     treatment = st.selectbox("Treatment", ["Control", "Stress"], index=0)
 
