@@ -50,6 +50,7 @@ st.markdown("""
         padding: 6px 18px;
         border-radius: 2px;
         transition: background-color 0.2s ease, color 0.2s ease;
+        cursor: pointer;
     }
 
     .nav-link:hover {
