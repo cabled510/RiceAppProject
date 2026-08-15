@@ -419,8 +419,6 @@ elif st.session_state['page'] == 'Batch':
         <div class="upload-dropzone">
             <div class="upload-title">Drop your CSV or Excel file here</div>
             <div class="upload-subtitle">Required columns: Accession, Treatment, Base_Height, H_Feb04, H_Feb14, Alive_Feb14</div>
-        </div>
-    """, unsafe_allow_html=True)
 
     # Row for file upload & template download triggers
     u_col1, u_col2, u_col3 = st.columns([1, 2, 1])
@@ -430,6 +428,9 @@ elif st.session_state['page'] == 'Batch':
             type=["csv", "xlsx"], 
             label_visibility="visible"
         )
+
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
