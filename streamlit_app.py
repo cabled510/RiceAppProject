@@ -308,7 +308,7 @@ st.markdown("""
 
 c1, c2, c3 = st.columns(3)
 
-  with c1:
+with c1:
         st.markdown("""
             <div class="feature-card">
                 <div class="feature-icon-box"></div>
