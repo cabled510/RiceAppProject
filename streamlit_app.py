@@ -335,24 +335,27 @@ with c3:
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-if st.session_state['page'] == 'Predict':
-   col_left, col_right = st.columns([1, 1], gap="large")
-    
-  with col_left:
-         st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
-         accession = st.selectbox("Accession", ["AGRA", "ADDO1", "GH10887", "Togbei"], index=0)
-         treatment = st.selectbox("Treatment", ["Control", "Stress"], index=0)
-         base_height = st.text_input("Base height at 3rd leaf (cm)", value="12.4")
-         height_feb4 = st.text_input("Height — Feb 4 (cm)", value="18.2")
-         height_feb14 = st.text_input("Height — Feb 14 (cm)", value="27.6")
+elif st.session_state['page'] == 'Predict':
+    # 1. Define columns with proper 4-space indentation
+    col_left, col_right = st.columns([1, 1], gap="large")
 
-         st.markdown("<br><div class='input-header'>Survival status</div>", unsafe_allow_html=True)
-         alive_feb4 = st.toggle("Alive at Feb 4", value=True)
-         alive_feb14 = st.toggle("Alive at Feb 14", value=True)
-         alive_feb21 = st.toggle("Alive at Feb 21", value=False)
-         run_pred = st.button("Run prediction", use_container_width=True)
+    # 2. Left Column (Inputs)
+    with col_left:
+        st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
+        accession = st.selectbox("Accession", ["AGRA", "ADDO1", "GH10887", "Togbei"], index=0)
+        treatment = st.selectbox("Treatment", ["Control", "Stress"], index=0)
+        base_height = st.text_input("Base height at 3rd leaf (cm)", value="12.4")
+        height_feb4 = st.text_input("Height — Feb 4 (cm)", value="18.2")
+        height_feb14 = st.text_input("Height — Feb 14 (cm)", value="27.6")
 
-   with col_right:
+        st.markdown("<br><div class='input-header'>Survival status</div>", unsafe_allow_html=True)
+        alive_feb4 = st.toggle("Alive at Feb 4", value=True)
+        alive_feb14 = st.toggle("Alive at Feb 14", value=True)
+        alive_feb21 = st.toggle("Alive at Feb 21", value=False)
+        run_pred = st.button("Run prediction", use_container_width=True)
+
+    # 3. Right Column (Prediction Display Cards)
+    with col_right:
         st.markdown("""
             <div class="variety-card">
                 <span class="confidence-tag">78% confidence</span>
@@ -360,10 +363,7 @@ if st.session_state['page'] == 'Predict':
                 <div class="variety-title">ADDO1</div>
                 <div class="variety-subtitle">Also likely: AGRA (12%) · GH10887 (6%)</div>
             </div>
-        """, unsafe_allow_html=True)
 
-        # 2. Trait Predictions Card
-    st.markdown("""
             <div class="trait-card">
                 <span class="confidence-tag" style="background-color: #f5f5f5; color: #555;">R² 0.82</span>
                 <div class="card-label">TRAIT PREDICTIONS</div>
@@ -386,10 +386,7 @@ if st.session_state['page'] == 'Predict':
                     </div>
                 </div>
             </div>
-        """, unsafe_allow_html=True)
 
-        # 3. Treatment Group Card
-    st.markdown("""
             <div class="treatment-card">
                 <span class="confidence-tag">97% confidence</span>
                 <div class="card-label">TREATMENT GROUP</div>
@@ -403,7 +400,5 @@ if st.session_state['page'] == 'Predict':
                 </div>
             </div>
         """, unsafe_allow_html=True)
-
-
 
 
