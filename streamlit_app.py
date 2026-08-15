@@ -351,7 +351,6 @@ with col_left:
     alive_feb4 = st.toggle("Alive at Feb 4", value=True)
     alive_feb14 = st.toggle("Alive at Feb 14", value=True)
     alive_feb21 = st.toggle("Alive at Feb 21", value=False)
-        # Run Prediction Primary Action Button
     run_pred = st.button("Run prediction", use_container_width=True)
 
 with col_right:
