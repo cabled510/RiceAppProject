@@ -1,8 +1,8 @@
 import streamlit as st
+import pandas as pd
+import numpy as np
 
-# =============================================================================
-# 1. PAGE CONFIGURATION & STATE INITIALIZATION
-# =============================================================================
+
 st.set_page_config(
     page_title="GhanaRice ML",
     page_icon="🌾",
@@ -17,12 +17,8 @@ if 'page' not in st.session_state:
 def set_page(page_name):
     st.session_state['page'] = page_name
 
-# =============================================================================
-# 2. GLOBAL STYLESHEET (CSS)
-# =============================================================================
 st.markdown("""
     <style>
-    /* Reset Streamlit outer margins */
     .block-container {
         padding-top: 0rem !important;
         padding-bottom: 2rem !important;
@@ -30,9 +26,6 @@ st.markdown("""
         padding-right: 0rem !important;
         max-width: 100% !important;
     }
-    header[data-testid="stHeader"] { display: none !important; }
-    #MainMenu { visibility: hidden; }
-    footer { visibility: hidden; }
 
     /* Target the navigation bar container */
     div[data-testid="stHorizontalBlock"]:has(div.nav-brand-target) {
@@ -50,6 +43,8 @@ st.markdown("""
         font-size: 1.35rem;
         font-weight: 400;
         line-height: 2.2rem;
+        display: flex;
+        
     }
 
     /* Style Streamlit Navigation Buttons */
@@ -245,10 +240,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# =============================================================================
-# 3. TOP NAVIGATION BAR (NO PAGE RELOADS)
-# =============================================================================
-nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([5, 1, 1, 1, 1])
+nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
 
 with nav_col1:
     st.markdown("<div class='nav-brand-target nav-brand-text'>🌾 GhanaRice ML</div>", unsafe_allow_html=True)
