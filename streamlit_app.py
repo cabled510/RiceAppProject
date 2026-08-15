@@ -128,6 +128,127 @@ st.markdown("""
         line-height: 1.5;
         max-width: 280px;
     }
+
+
+    /* Base typography for input form */
+        .input-header {
+            font-family: serif, 'Times New Roman';
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: #111111;
+            margin-bottom: 12px;
+        }
+        
+        /* Prediction Card 1: Variety Card (Blue Bracket Accent) */
+        .variety-card {
+            border-left: 3px solid #1a4380;
+            border-radius: 0 12px 12px 0;
+            padding: 8px 0px 8px 18px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+        .card-label {
+            font-family: 'Helvetica Neue', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.8px;
+            color: #222222;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        .confidence-tag {
+            float: right;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-family: sans-serif;
+        }
+        .variety-title {
+            font-family: serif, 'Times New Roman';
+            font-size: 1.6rem;
+            color: #0d2c6c;
+            margin: 6px 0 2px 0;
+        }
+        .variety-subtitle {
+            font-family: serif, 'Times New Roman';
+            font-size: 0.88rem;
+            color: #333333;
+        }
+
+        /* Prediction Card 2: Trait Predictions (Gold Bracket Accent) */
+        .trait-card {
+            border-left: 3px solid #caa052;
+            border-radius: 0 12px 12px 0;
+            padding: 8px 0px 8px 18px;
+            margin-bottom: 24px;
+        }
+        .metric-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            row-gap: 16px;
+            column-gap: 20px;
+            margin-top: 14px;
+        }
+        .metric-val {
+            font-family: serif, 'Times New Roman';
+            font-size: 1.25rem;
+            color: #111111;
+        }
+        .metric-lbl {
+            font-family: serif, 'Times New Roman';
+            font-size: 0.82rem;
+            color: #444444;
+        }
+
+        /* Prediction Card 3: Treatment Group (Green Bracket Accent) */
+        .treatment-card {
+            border-left: 3px solid #2e7d32;
+            border-radius: 0 12px 12px 0;
+            padding: 8px 0px 8px 18px;
+        }
+        .treatment-title {
+            font-family: serif, 'Times New Roman';
+            font-size: 1.25rem;
+            color: #2e7d32;
+            margin: 8px 0 12px 0;
+        }
+        /* Custom Progress Bar */
+        .progress-bg {
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            height: 8px;
+            width: 100%;
+            margin-bottom: 6px;
+        }
+        .progress-fill {
+            background-color: #2e7d32;
+            height: 8px;
+            border-radius: 4px;
+            width: 97%;
+        }
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-family: serif, 'Times New Roman';
+            font-size: 0.82rem;
+            color: #333333;
+        }
+
+        /* Submit Button Custom Styling */
+        div.stButton > button {
+            background-color: #0b2f6b !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 2px !important;
+            font-family: serif, 'Times New Roman' !important;
+            font-size: 1.1rem !important;
+            height: 2.8rem !important;
+            margin-top: 15px;
+        }
+        div.stButton > button:hover {
+            background-color: #071f48 !important;
+        }
     
     </style>
 """, unsafe_allow_html=True)
@@ -210,6 +331,91 @@ with c3:
         """, unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
+
+
+if st.session_state.get('page') == 'Predict':
+
+    # 2-Column Layout (Left: Inputs, Right: Predictions)
+    col_left, col_right = st.columns([1, 1], gap="large")
+
+    # -------------------------------------------------------------------------
+    # LEFT COLUMN: INPUT FORM
+    # -------------------------------------------------------------------------
+    with col_left:
+        st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
+
+        accession = st.selectbox("Accession", ["AGRA", "ADDO1", "GH10887", "Togbei"], index=0)
+        treatment = st.selectbox("Treatment", ["Control", "Stress"], index=0)
+
+        base_height = st.text_input("Base height at 3rd leaf (cm)", value="12.4")
+        height_feb4 = st.text_input("Height — Feb 4 (cm)", value="18.2")
+        height_feb14 = st.text_input("Height — Feb 14 (cm)", value="27.6")
+
+        st.markdown("<br><div class='input-header'>Survival status</div>", unsafe_allow_html=True)
+
+        alive_feb4 = st.toggle("Alive at Feb 4", value=True)
+        alive_feb14 = st.toggle("Alive at Feb 14", value=True)
+        alive_feb21 = st.toggle("Alive at Feb 21", value=False)
+
+        # Run Prediction Primary Action Button
+        run_pred = st.button("Run prediction", use_container_width=True)
+
+    # -------------------------------------------------------------------------
+    # RIGHT COLUMN: PREDICTION RESULTS CARDS
+    # -------------------------------------------------------------------------
+    with col_right:
+
+        # 1. Variety Prediction Card
+        st.markdown("""
+            <div class="variety-card">
+                <span class="confidence-tag">78% confidence</span>
+                <div class="card-label">VARIETY PREDICTION</div>
+                <div class="variety-title">ADDO1</div>
+                <div class="variety-subtitle">Also likely: AGRA (12%) · GH10887 (6%)</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+        # 2. Trait Predictions Card
+        st.markdown("""
+            <div class="trait-card">
+                <span class="confidence-tag" style="background-color: #f5f5f5; color: #555;">R² 0.82</span>
+                <div class="card-label">TRAIT PREDICTIONS</div>
+                <div class="metric-grid">
+                    <div>
+                        <div class="metric-val">34.2 cm</div>
+                        <div class="metric-lbl">Final height</div>
+                    </div>
+                    <div>
+                        <div class="metric-val">7</div>
+                        <div class="metric-lbl">Leaf count</div>
+                    </div>
+                    <div>
+                        <div class="metric-val">14</div>
+                        <div class="metric-lbl">Root count</div>
+                    </div>
+                    <div>
+                        <div class="metric-val">22.1 cm</div>
+                        <div class="metric-lbl">Root length</div>
+                    </div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+
+        # 3. Treatment Group Card
+        st.markdown("""
+            <div class="treatment-card">
+                <span class="confidence-tag">97% confidence</span>
+                <div class="card-label">TREATMENT GROUP</div>
+                <div class="treatment-title">Control</div>
+                <div class="progress-bg">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-labels">
+                    <span>Control 97%</span>
+                    <span>Stress 3%</span>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
 
 
 
