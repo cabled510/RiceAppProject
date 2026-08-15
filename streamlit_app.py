@@ -14,6 +14,47 @@ st.set_page_config(
 st.markdown("""
     <style>
 
+    st.markdown("""
+    <style>
+    /* Full-width dark blue navigation wrapper */
+    .nav-wrapper {
+        background-color: #0b2f6b;
+        padding: 10px 30px;
+        border-bottom: 2px solid #caa052;
+        margin-bottom: 30px;
+    }
+
+    /* Style Streamlit buttons inside the navigation bar columns */
+    div[data-testid="stColumn"] button {
+        border-radius: 2px;
+        font-family: serif, 'Times New Roman';
+        font-size: 1rem;
+        height: 2.4rem;
+        margin-top: 2px;
+    }
+    
+    /* Primary (Active) Button Styling */
+    div[data-testid="stColumn"] button[kind="primary"] {
+        background-color: #274780 
+        color: #ffffff;
+        border: none !important;
+        font-weight: 600 !important;
+    }
+
+    /* Secondary (Inactive) Button Styling */
+    div[data-testid="stColumn"] button[kind="secondary"] {
+        background-color: transparent !important;
+        color: #d1d5db;
+        border: none !important;
+    }
+
+    div[data-testid="stColumn"] button[kind="secondary"]:hover {
+        color: #ffffff; 
+        background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
     
     .main-header {
         font-size: 1.375rem;
@@ -90,17 +131,20 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+
+st.markdown("<div class='nav-wrapper'>", unsafe_allow_html=True)
+
+nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
+
+with nav_col1:
+    st.markdown("<div style= font-size:1.2rem; padding:16px; font-weight:600;'>🌾 GhanaRice ML</div>", unsafe_allow_html=True)
+
 if 'page' not in st.session_state:
     st.session_state['page'] = 'Home'
 
 # Helper function to switch pages
 def set_page(page_name):
     st.session_state['page'] = page_name
-
-nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
-
-with nav_col1:
-    st.markdown("<div style= font-size:1.2rem; padding:16px; font-weight:600;'>🌾 GhanaRice ML</div>", unsafe_allow_html=True)
 
 with nav_col2:
     if st.button("Home", key="btn_home", use_container_width=True, type="primary" if st.session_state['page'] == 'Home' else "secondary"):
