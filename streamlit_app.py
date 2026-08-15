@@ -339,7 +339,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 elif st.session_state['page'] == 'Predict':
     # 1. Define columns with proper 4-space indentation
-    col_left, col_right = st.columns([1, 1], gap="large")
+     col_left, col_right = st.columns([1, 1], gap="large")
 
     # 2. Left Column (Inputs)
     with col_left:
