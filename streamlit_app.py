@@ -20,11 +20,11 @@ def set_page(page_name):
 st.markdown("""
     <style>
     .block-container {
-        padding-top: 0rem !important;
-        padding-bottom: 2rem !important;
-        padding-left: 0rem !important;
-        padding-right: 0rem !important;
-        max-width: 100% !important;
+        padding-top: 0rem;
+        padding-bottom: 2rem;
+        padding-left: 0rem;
+        padding-right: 0rem;
+        max-width: 100%;
     }
 
     header[data-testid="stHeader"] { display: none !important; }
@@ -33,11 +33,10 @@ st.markdown("""
 
     /* Target the navigation bar container */
     div[data-testid="stHorizontalBlock"]:has(div.nav-brand-target) {
-        background-color: #0b2f6b !important;
-        border-bottom: 2px solid #caa052 !important;
-        padding: 8px 40px !important;
-        align-items: center !important;
-        margin-bottom: 30px !important;
+        background-color: #0b2f6b;
+        border-bottom: 2px solid #caa052;
+        padding: 8px 40px;
+        margin-bottom: 30px;
     }
 
     /* Brand Name Text Styling */
