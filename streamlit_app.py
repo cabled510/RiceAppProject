@@ -124,8 +124,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-st.markdown("<div class='nav-wrapper'>", unsafe_allow_html=True)
-
+st.markdown("<div class='nav-wrapper'>", 
 nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
 
 with nav_col1:
@@ -157,6 +156,9 @@ with nav_col5:
     if st.button("Dashboard", key="btn_dashboard", use_container_width=True, type="primary" if st.session_state['page'] == 'Dashboard' else "secondary"):
         set_page("Dashboard")
         st.rerun()
+        
+unsafe_allow_html=True)
+
 
 st.markdown("</div>", unsafe_allow_html=True)
 
