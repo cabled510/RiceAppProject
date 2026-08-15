@@ -245,14 +245,6 @@ st.markdown("""
         margin-top: 15px;
     }
 
-     div.stKey-run2_button button {
-        background-color: #0A2B7A;
-        color: white;
-    }
-    div.stKey-run2_button button:hover {
-        background-color: #6d28d9;
-        color: white;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -349,7 +341,7 @@ elif st.session_state['page'] == 'Predict':
         alive_feb14 = st.toggle("Alive at Feb 14", value=True)
         alive_feb21 = st.toggle("Alive at Feb 21", value=False)
 
-        st.button("Run Prediction", key="run2_button", use_container_width=True)
+        st.button("Run Prediction", use_container_width=True)
 
     with col_right:
         st.markdown("""
