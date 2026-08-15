@@ -66,7 +66,7 @@ st.markdown("<div class='navbar'>", unsafe_allow_html=True)
 nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
 
 with nav_col1:
-    st.markdown("<div style= font-size:1.2rem; font-weight:600;'>🌾 GhanaRice ML</div>", unsafe_allow_html=True)
+    st.markdown("<div style= font-size:1.2rem; padding:16px; font-weight:600;'>🌾 GhanaRice ML</div>", unsafe_allow_html=True)
 
 with nav_col2:
     if st.button("Home", key="btn_home", use_container_width=True, type="primary" if st.session_state['page'] == 'Home' else "secondary"):
