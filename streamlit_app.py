@@ -35,7 +35,7 @@ st.markdown("""
     div[data-testid="stHorizontalBlock"]:has(div.nav-brand-target) {
         background-color: #0b2f6b;
         border-bottom: 2px solid #caa052;
-        padding: 8px 40px;
+        padding: 15px 4px;
         margin-bottom: 30px;
     }
 
