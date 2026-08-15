@@ -14,8 +14,6 @@ st.set_page_config(
 st.markdown("""
     <style>
 
-    st.markdown("""
-    <style>
     /* Full-width dark blue navigation wrapper */
     .nav-wrapper {
         background-color: #0b2f6b;
