@@ -336,8 +336,8 @@ with c3:
 st.markdown("</div>", unsafe_allow_html=True)
 
 
-elif st.session_state.get('page') == 'Predict':
-    col_left, col_right = st.columns([1, 1], gap="large")
+   elif st.session_state.get('page') == 'Predict':
+      col_left, col_right = st.columns([1, 1], gap="large")
 
     with col_left:
         st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
