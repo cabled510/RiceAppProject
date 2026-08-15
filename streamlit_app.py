@@ -27,6 +27,10 @@ st.markdown("""
         max-width: 100% !important;
     }
 
+    header[data-testid="stHeader"] { display: none !important; }
+    #MainMenu { visibility: hidden; }
+    footer { visibility: hidden; }
+
     /* Target the navigation bar container */
     div[data-testid="stHorizontalBlock"]:has(div.nav-brand-target) {
         background-color: #0b2f6b !important;
