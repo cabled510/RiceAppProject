@@ -1,115 +1,116 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
 
-# 1. Page Configuration
+# =============================================================================
+# 1. PAGE CONFIGURATION & STATE INITIALIZATION
+# =============================================================================
 st.set_page_config(
-    page_title="Ghanaian Rice Germplasm Intelligence Hub",
+    page_title="GhanaRice ML",
     page_icon="🌾",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# 2. Custom Styling
+# Initialize Session State Page Navigation
+if 'page' not in st.session_state:
+    st.session_state['page'] = 'Home'
+
+def set_page(page_name):
+    st.session_state['page'] = page_name
+
+# =============================================================================
+# 2. GLOBAL STYLESHEET (CSS)
+# =============================================================================
 st.markdown("""
     <style>
+    /* Reset Streamlit outer margins */
+    .block-container {
+        padding-top: 0rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 0rem !important;
+        padding-right: 0rem !important;
+        max-width: 100% !important;
+    }
+    header[data-testid="stHeader"] { display: none !important; }
+    #MainMenu { visibility: hidden; }
+    footer { visibility: hidden; }
 
-    /* Full-width dark blue navigation wrapper */
-    .nav-wrapper {
-        background: #0A2B7A;
-        display: flex;
-        justify-content: space-between;
-        padding: 0 1.25rem;
-        border-bottom: 2px solid #caa052;
-        margin-bottom: 30px;
-        height: 69px;
+    /* Target the navigation bar container */
+    div[data-testid="stHorizontalBlock"]:has(div.nav-brand-target) {
+        background-color: #0b2f6b !important;
+        border-bottom: 2px solid #caa052 !important;
+        padding: 8px 40px !important;
+        align-items: center !important;
+        margin-bottom: 30px !important;
     }
 
-    .nav-brand {
+    /* Brand Name Text Styling */
+    .nav-brand-text {
         color: #ffffff;
         font-family: serif, 'Times New Roman', Times;
         font-size: 1.35rem;
         font-weight: 400;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        line-height: 2.2rem;
     }
 
-    .nav-items {
-        display: flex;
-        align-items: center;
-        gap: 12px;
+    /* Style Streamlit Navigation Buttons */
+    div[data-testid="stHorizontalBlock"]:has(div.nav-brand-target) button {
+        background-color: transparent !important;
+        color: #d1d5db !important;
+        border: none !important;
+        font-family: serif, 'Times New Roman', Times !important;
+        font-size: 1.05rem !important;
+        box-shadow: none !important;
+        height: 2.4rem !important;
+        border-radius: 2px !important;
+        margin-top: 0px !important;
     }
 
-    .nav-link {
-        color: #d1d5db;
-        font-family: 'Times New Roman';
-        font-size: 1.05rem;
-        text-decoration: none;
-        padding: 6px 18px;
-        border-radius: 2px;
-        transition: background-color 0.2s ease, color 0.2s ease;
-        cursor: pointer;
+    div[data-testid="stHorizontalBlock"]:has(div.nav-brand-target) button:hover {
+        color: #ffffff !important;
+        background-color: rgba(255, 255, 255, 0.08) !important;
     }
 
-    .nav-link:hover {
-        color: #ffffff;
-        background-color: rgba(255, 255, 255, 0.08);
+    /* Active Tab Style */
+    div[data-testid="stHorizontalBlock"]:has(div.nav-brand-target) button[kind="primary"] {
+        color: #ffffff !important;
+        background-color: #274780 !important;
+        font-weight: 500 !important;
     }
 
+    /* Home Page Styling */
     .main-header {
-        font-size: 1.375rem;
-        color: #0A2B7A;
-        font-weight: 500;
+        font-family: serif, 'Times New Roman';
+        font-size: 2.2rem;
+        color: #0b2f6b;
         text-align: center;
-        margin-bottom: 0.375rem;
+        margin-bottom: 8px;
     }
-
     .sub-header {
+        font-family: serif, 'Times New Roman';
         font-size: 1.1rem;
-        color: var(--text-secondary);
+        color: #444444;
         text-align: center;
-        margin-bottom: 2.813rem;
+        margin-bottom: 40px;
     }
-
-    .metric-card {
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        padding: 15px;
-        border-left: 5px solid #2d6a4f;
-    }
-
-    /* Metric Stat Box */
     .stats-wrapper {
         display: flex;
         justify-content: center;
-        align-items: center;
-        gap: 3.75rem;
-        margin-bottom: 40px;
-    }
-
-    .stat-box {
-        text-align: center;
+        gap: 40px;
         margin-bottom: 50px;
     }
-
+    .stat-box { text-align: center; }
     .stat-number {
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: #0b3c85;
-        line-height: 1.1;
+        font-family: serif, 'Times New Roman';
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: #0b2f6b;
     }
-
     .stat-label {
-        font-size: 0.85rem;
+        font-family: serif, 'Times New Roman';
+        font-size: 0.95rem;
         color: #555555;
     }
-
-    /* Feature Grid Section */
-    .feature-card {
-        padding: 0px 10px;
-    }
-
+    .feature-card { padding: 0px 10px; }
     .feature-icon-box {
         width: 44px;
         height: 44px;
@@ -117,25 +118,23 @@ st.markdown("""
         border-radius: 2px;
         margin-bottom: 18px;
     }
-
     .feature-title {
         font-size: 1.15rem;
         font-weight: 500;
-        color: var(--text-primary);
+        color: #111111;
         font-family: serif, 'Times New Roman';
-        margin-bottom: 4px;
+        margin-bottom: 8px;
         line-height: 1.2;
     }
-
     .feature-desc {
         font-size: 0.95rem;
-        color: var(--text-secondary);
+        color: #111111;
         font-family: serif, 'Times New Roman';
-        line-height: 1.5;
+        line-height: 1.45;
         max-width: 280px;
     }
 
-    /* Base typography for input form */
+    /* Predict Page Cards */
     .input-header {
         font-family: serif, 'Times New Roman';
         font-size: 1.15rem;
@@ -143,25 +142,20 @@ st.markdown("""
         color: #111111;
         margin-bottom: 12px;
     }
-
-    /* Prediction Card 1: Variety Card (Blue Bracket Accent) */
     .variety-card {
         border-left: 3px solid #1a4380;
         border-radius: 0 12px 12px 0;
         padding: 8px 0px 8px 18px;
         margin-bottom: 24px;
-        position: relative;
     }
-
     .card-label {
-        font-family: 'Helvetica Neue', sans-serif;
+        font-family: sans-serif;
         font-size: 0.75rem;
         letter-spacing: 0.8px;
         color: #222222;
         text-transform: uppercase;
         font-weight: 500;
     }
-
     .confidence-tag {
         float: right;
         background-color: #e8f5e9;
@@ -171,28 +165,23 @@ st.markdown("""
         border-radius: 10px;
         font-family: sans-serif;
     }
-
     .variety-title {
         font-family: serif, 'Times New Roman';
         font-size: 1.6rem;
         color: #0d2c6c;
         margin: 6px 0 2px 0;
     }
-
     .variety-subtitle {
         font-family: serif, 'Times New Roman';
         font-size: 0.88rem;
         color: #333333;
     }
-
-    /* Prediction Card 2: Trait Predictions (Gold Bracket Accent) */
     .trait-card {
         border-left: 3px solid #caa052;
         border-radius: 0 12px 12px 0;
         padding: 8px 0px 8px 18px;
         margin-bottom: 24px;
     }
-
     .metric-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -200,34 +189,27 @@ st.markdown("""
         column-gap: 20px;
         margin-top: 14px;
     }
-
     .metric-val {
         font-family: serif, 'Times New Roman';
         font-size: 1.25rem;
         color: #111111;
     }
-
     .metric-lbl {
         font-family: serif, 'Times New Roman';
         font-size: 0.82rem;
         color: #444444;
     }
-
-    /* Prediction Card 3: Treatment Group (Green Bracket Accent) */
     .treatment-card {
         border-left: 3px solid #2e7d32;
         border-radius: 0 12px 12px 0;
         padding: 8px 0px 8px 18px;
     }
-
     .treatment-title {
         font-family: serif, 'Times New Roman';
         font-size: 1.25rem;
         color: #2e7d32;
         margin: 8px 0 12px 0;
     }
-
-    /* Custom Progress Bar */
     .progress-bg {
         background-color: #e0e0e0;
         border-radius: 4px;
@@ -235,14 +217,12 @@ st.markdown("""
         width: 100%;
         margin-bottom: 6px;
     }
-
     .progress-fill {
         background-color: #2e7d32;
         height: 8px;
         border-radius: 4px;
         width: 97%;
     }
-
     .progress-labels {
         display: flex;
         justify-content: space-between;
@@ -251,8 +231,8 @@ st.markdown("""
         color: #333333;
     }
 
-    /* Submit Button Custom Styling */
-    div.stButton > button {
+    /* Submit Button */
+    div.stButton > button:not(div[data-testid="stHorizontalBlock"] button) {
         background-color: #0b2f6b !important;
         color: white !important;
         border: none !important;
@@ -262,60 +242,54 @@ st.markdown("""
         height: 2.8rem !important;
         margin-top: 15px;
     }
-
-    div.stButton > button:hover {
-        background-color: #071f48 !important;
-    }
-
     </style>
 """, unsafe_allow_html=True)
 
-# 3. Navigation Setup
-query_params = st.query_params
-if "page" in query_params:
-    st.session_state['page'] = query_params["page"]
-elif 'page' not in st.session_state:
-    st.session_state['page'] = 'Home'
+# =============================================================================
+# 3. TOP NAVIGATION BAR (NO PAGE RELOADS)
+# =============================================================================
+nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([5, 1, 1, 1, 1])
 
-st.markdown("""
-    <div class="nav-wrapper">
-        <div class="nav-brand">🌾 GhanaRice ML</div>
-        <div class="nav-items">
-            <a class="nav-link" href="?page=Home" target="_self">Home</a>
-            <a class="nav-link" href="?page=Predict" target="_self">Predict</a>
-            <a class="nav-link" href="?page=Batch" target="_self">Batch</a>
-            <a class="nav-link" href="?page=Dashboard" target="_self">Dashboard</a>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
+with nav_col1:
+    st.markdown("<div class='nav-brand-target nav-brand-text'>🌾 GhanaRice ML</div>", unsafe_allow_html=True)
 
-# 4. Main App Container
-st.markdown("<div style='padding: 0px 40px;'>", unsafe_allow_html=True)
+with nav_col2:
+    st.button("Home", key="btn_home", use_container_width=True, 
+              type="primary" if st.session_state['page'] == 'Home' else "secondary", 
+              on_click=set_page, args=("Home",))
 
-# --- PAGE ROUTING ---
+with nav_col3:
+    st.button("Predict", key="btn_predict", use_container_width=True, 
+              type="primary" if st.session_state['page'] == 'Predict' else "secondary", 
+              on_click=set_page, args=("Predict",))
 
+with nav_col4:
+    st.button("Batch", key="btn_batch", use_container_width=True, 
+              type="primary" if st.session_state['page'] == 'Batch' else "secondary", 
+              on_click=set_page, args=("Batch",))
+
+with nav_col5:
+    st.button("Dashboard", key="btn_dashboard", use_container_width=True, 
+              type="primary" if st.session_state['page'] == 'Dashboard' else "secondary", 
+              on_click=set_page, args=("Dashboard",))
+
+
+# =============================================================================
+# 4. PAGE ROUTING & CONTENT
+# =============================================================================
+st.markdown("<div style='padding: 0px 60px;'>", unsafe_allow_html=True)
+
+# --- HOME PAGE ---
 if st.session_state['page'] == 'Home':
-    st.markdown("<div class='main-header'> Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
+    st.markdown("<div class='main-header'>Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
     st.markdown("<div class='sub-header'>Enter early-stage growth measurements — get instant predictions on variety, traits, and stress classification</div>", unsafe_allow_html=True)
 
     st.markdown("""
         <div class="stats-wrapper">
-            <div class="stat-box">
-                <div class="stat-number">18</div>
-                <div class="stat-label">accessions</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">720</div>
-                <div class="stat-label">observations</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">6</div>
-                <div class="stat-label">algorithms</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">98.1%</div>
-                <div class="stat-label">best F1 (task C)</div>
-            </div>
+            <div class="stat-box"><div class="stat-number">18</div><div class="stat-label">accessions</div></div>
+            <div class="stat-box"><div class="stat-number">720</div><div class="stat-label">observations</div></div>
+            <div class="stat-box"><div class="stat-number">6</div><div class="stat-label">algorithms</div></div>
+            <div class="stat-box"><div class="stat-number">98.1%</div><div class="stat-label">best F1 (task C)</div></div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -329,6 +303,7 @@ if st.session_state['page'] == 'Home':
                 <div class="feature-desc">Enter one plant's measurements and get variety, trait, and stress predictions instantly</div>
             </div>
         """, unsafe_allow_html=True)
+        st.button("Go to Single Prediction →", key="go_pred", on_click=set_page, args=("Predict",))
 
     with c2:
         st.markdown("""
@@ -338,6 +313,7 @@ if st.session_state['page'] == 'Home':
                 <div class="feature-desc">Upload a CSV of multiple plants and download an Excel file of all predictions</div>
             </div>
         """, unsafe_allow_html=True)
+        st.button("Go to Batch Upload →", key="go_batch", on_click=set_page, args=("Batch",))
 
     with c3:
         st.markdown("""
@@ -347,11 +323,12 @@ if st.session_state['page'] == 'Home':
                 <div class="feature-desc">View performance metrics and feature importance for all six trained algorithms</div>
             </div>
         """, unsafe_allow_html=True)
+        st.button("View Dashboard →", key="go_dash", on_click=set_page, args=("Dashboard",))
 
+# --- PREDICT PAGE ---
 elif st.session_state['page'] == 'Predict':
     col_left, col_right = st.columns([1, 1], gap="large")
 
-    # Inputs Column
     with col_left:
         st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
         accession = st.selectbox("Accession", ["AGRA", "ADDO1", "GH10887", "Togbei"], index=0)
@@ -364,9 +341,9 @@ elif st.session_state['page'] == 'Predict':
         alive_feb4 = st.toggle("Alive at Feb 4", value=True)
         alive_feb14 = st.toggle("Alive at Feb 14", value=True)
         alive_feb21 = st.toggle("Alive at Feb 21", value=False)
-        run_pred = st.button("Run prediction", use_container_width=True)
 
-    # Prediction Display Cards Column
+        st.button("Run prediction", use_container_width=True)
+
     with col_right:
         st.markdown("""
             <div class="variety-card">
@@ -403,9 +380,7 @@ elif st.session_state['page'] == 'Predict':
                 <span class="confidence-tag">97% confidence</span>
                 <div class="card-label">TREATMENT GROUP</div>
                 <div class="treatment-title">Control</div>
-                <div class="progress-bg">
-                    <div class="progress-fill"></div>
-                </div>
+                <div class="progress-bg"><div class="progress-fill"></div></div>
                 <div class="progress-labels">
                     <span>Control 97%</span>
                     <span>Stress 3%</span>
@@ -413,13 +388,14 @@ elif st.session_state['page'] == 'Predict':
             </div>
         """, unsafe_allow_html=True)
 
+# --- BATCH PAGE ---
 elif st.session_state['page'] == 'Batch':
-    st.title("Batch Prediction")
+    st.title("Batch Upload")
+    st.write("Upload a CSV file containing early growth parameters to generate predictions in bulk.")
 
+# --- DASHBOARD PAGE ---
 elif st.session_state['page'] == 'Dashboard':
     st.title("Model Dashboard")
+    st.write("Explore machine learning model metrics, confusion matrices, and feature importance rankings.")
 
-# Close main app container
 st.markdown("</div>", unsafe_allow_html=True)
-
-
