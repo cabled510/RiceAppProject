@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-
+# 1. Page Configuration
 st.set_page_config(
     page_title="Ghanaian Rice Germplasm Intelligence Hub",
     page_icon="🌾",
@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom Styling
+# 2. Custom Styling
 st.markdown("""
     <style>
 
@@ -41,7 +41,6 @@ st.markdown("""
         gap: 12px;
     }
 
-
     .nav-link {
         color: #d1d5db;
         font-family: 'Times New Roman';
@@ -57,6 +56,7 @@ st.markdown("""
         color: #ffffff;
         background-color: rgba(255, 255, 255, 0.08);
     }
+
     .main-header {
         font-size: 1.375rem;
         color: #0A2B7A;
@@ -64,12 +64,14 @@ st.markdown("""
         text-align: center;
         margin-bottom: 0.375rem;
     }
+
     .sub-header {
         font-size: 1.1rem;
         color: var(--text-secondary);
         text-align: center;
         margin-bottom: 2.813rem;
     }
+
     .metric-card {
         background-color: #f8f9fa;
         border-radius: 8px;
@@ -78,7 +80,6 @@ st.markdown("""
     }
 
     /* Metric Stat Box */
-
     .stats-wrapper {
         display: flex;
         justify-content: center;
@@ -86,17 +87,19 @@ st.markdown("""
         gap: 3.75rem;
         margin-bottom: 40px;
     }
-    
+
     .stat-box {
         text-align: center;
         margin-bottom: 50px;
     }
+
     .stat-number {
         font-size: 1.6rem;
         font-weight: 700;
         color: #0b3c85;
         line-height: 1.1;
     }
+
     .stat-label {
         font-size: 0.85rem;
         color: #555555;
@@ -106,13 +109,15 @@ st.markdown("""
     .feature-card {
         padding: 0px 10px;
     }
+
     .feature-icon-box {
         width: 44px;
         height: 44px;
-        background-color: #eef4fc; /* Light blue tint matching the screenshot */
+        background-color: #eef4fc;
         border-radius: 2px;
         margin-bottom: 18px;
     }
+
     .feature-title {
         font-size: 1.15rem;
         font-weight: 500;
@@ -121,6 +126,7 @@ st.markdown("""
         margin-bottom: 4px;
         line-height: 1.2;
     }
+
     .feature-desc {
         font-size: 0.95rem;
         color: var(--text-secondary);
@@ -129,142 +135,149 @@ st.markdown("""
         max-width: 280px;
     }
 
-
     /* Base typography for input form */
-        .input-header {
-            font-family: serif, 'Times New Roman';
-            font-size: 1.15rem;
-            font-weight: 500;
-            color: #111111;
-            margin-bottom: 12px;
-        }
-        
-        /* Prediction Card 1: Variety Card (Blue Bracket Accent) */
-        .variety-card {
-            border-left: 3px solid #1a4380;
-            border-radius: 0 12px 12px 0;
-            padding: 8px 0px 8px 18px;
-            margin-bottom: 24px;
-            position: relative;
-        }
-        .card-label {
-            font-family: 'Helvetica Neue', sans-serif;
-            font-size: 0.75rem;
-            letter-spacing: 0.8px;
-            color: #222222;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
-        .confidence-tag {
-            float: right;
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            font-size: 0.75rem;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-family: sans-serif;
-        }
-        .variety-title {
-            font-family: serif, 'Times New Roman';
-            font-size: 1.6rem;
-            color: #0d2c6c;
-            margin: 6px 0 2px 0;
-        }
-        .variety-subtitle {
-            font-family: serif, 'Times New Roman';
-            font-size: 0.88rem;
-            color: #333333;
-        }
+    .input-header {
+        font-family: serif, 'Times New Roman';
+        font-size: 1.15rem;
+        font-weight: 500;
+        color: #111111;
+        margin-bottom: 12px;
+    }
 
-        /* Prediction Card 2: Trait Predictions (Gold Bracket Accent) */
-        .trait-card {
-            border-left: 3px solid #caa052;
-            border-radius: 0 12px 12px 0;
-            padding: 8px 0px 8px 18px;
-            margin-bottom: 24px;
-        }
-        .metric-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            row-gap: 16px;
-            column-gap: 20px;
-            margin-top: 14px;
-        }
-        .metric-val {
-            font-family: serif, 'Times New Roman';
-            font-size: 1.25rem;
-            color: #111111;
-        }
-        .metric-lbl {
-            font-family: serif, 'Times New Roman';
-            font-size: 0.82rem;
-            color: #444444;
-        }
+    /* Prediction Card 1: Variety Card (Blue Bracket Accent) */
+    .variety-card {
+        border-left: 3px solid #1a4380;
+        border-radius: 0 12px 12px 0;
+        padding: 8px 0px 8px 18px;
+        margin-bottom: 24px;
+        position: relative;
+    }
 
-        /* Prediction Card 3: Treatment Group (Green Bracket Accent) */
-        .treatment-card {
-            border-left: 3px solid #2e7d32;
-            border-radius: 0 12px 12px 0;
-            padding: 8px 0px 8px 18px;
-        }
-        .treatment-title {
-            font-family: serif, 'Times New Roman';
-            font-size: 1.25rem;
-            color: #2e7d32;
-            margin: 8px 0 12px 0;
-        }
-        /* Custom Progress Bar */
-        .progress-bg {
-            background-color: #e0e0e0;
-            border-radius: 4px;
-            height: 8px;
-            width: 100%;
-            margin-bottom: 6px;
-        }
-        .progress-fill {
-            background-color: #2e7d32;
-            height: 8px;
-            border-radius: 4px;
-            width: 97%;
-        }
-        .progress-labels {
-            display: flex;
-            justify-content: space-between;
-            font-family: serif, 'Times New Roman';
-            font-size: 0.82rem;
-            color: #333333;
-        }
+    .card-label {
+        font-family: 'Helvetica Neue', sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 0.8px;
+        color: #222222;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
 
-        /* Submit Button Custom Styling */
-        div.stButton > button {
-            background-color: #0b2f6b !important;
-            color: white !important;
-            border: none !important;
-            border-radius: 2px !important;
-            font-family: serif, 'Times New Roman' !important;
-            font-size: 1.1rem !important;
-            height: 2.8rem !important;
-            margin-top: 15px;
-        }
-        div.stButton > button:hover {
-            background-color: #071f48 !important;
-        }
-    
+    .confidence-tag {
+        float: right;
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        font-size: 0.75rem;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-family: sans-serif;
+    }
+
+    .variety-title {
+        font-family: serif, 'Times New Roman';
+        font-size: 1.6rem;
+        color: #0d2c6c;
+        margin: 6px 0 2px 0;
+    }
+
+    .variety-subtitle {
+        font-family: serif, 'Times New Roman';
+        font-size: 0.88rem;
+        color: #333333;
+    }
+
+    /* Prediction Card 2: Trait Predictions (Gold Bracket Accent) */
+    .trait-card {
+        border-left: 3px solid #caa052;
+        border-radius: 0 12px 12px 0;
+        padding: 8px 0px 8px 18px;
+        margin-bottom: 24px;
+    }
+
+    .metric-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 16px;
+        column-gap: 20px;
+        margin-top: 14px;
+    }
+
+    .metric-val {
+        font-family: serif, 'Times New Roman';
+        font-size: 1.25rem;
+        color: #111111;
+    }
+
+    .metric-lbl {
+        font-family: serif, 'Times New Roman';
+        font-size: 0.82rem;
+        color: #444444;
+    }
+
+    /* Prediction Card 3: Treatment Group (Green Bracket Accent) */
+    .treatment-card {
+        border-left: 3px solid #2e7d32;
+        border-radius: 0 12px 12px 0;
+        padding: 8px 0px 8px 18px;
+    }
+
+    .treatment-title {
+        font-family: serif, 'Times New Roman';
+        font-size: 1.25rem;
+        color: #2e7d32;
+        margin: 8px 0 12px 0;
+    }
+
+    /* Custom Progress Bar */
+    .progress-bg {
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        height: 8px;
+        width: 100%;
+        margin-bottom: 6px;
+    }
+
+    .progress-fill {
+        background-color: #2e7d32;
+        height: 8px;
+        border-radius: 4px;
+        width: 97%;
+    }
+
+    .progress-labels {
+        display: flex;
+        justify-content: space-between;
+        font-family: serif, 'Times New Roman';
+        font-size: 0.82rem;
+        color: #333333;
+    }
+
+    /* Submit Button Custom Styling */
+    div.stButton > button {
+        background-color: #0b2f6b !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 2px !important;
+        font-family: serif, 'Times New Roman' !important;
+        font-size: 1.1rem !important;
+        height: 2.8rem !important;
+        margin-top: 15px;
+    }
+
+    div.stButton > button:hover {
+        background-color: #071f48 !important;
+    }
+
     </style>
 """, unsafe_allow_html=True)
 
-# Helper function to switch pages
-def set_page(page_name):
-    st.session_state['page'] = page_name
-
+# 3. Navigation Setup
 query_params = st.query_params
 if "page" in query_params:
     st.session_state['page'] = query_params["page"]
 elif 'page' not in st.session_state:
     st.session_state['page'] = 'Home'
 
-
-st.markdown(f"""
+st.markdown("""
     <div class="nav-wrapper">
         <div class="nav-brand">🌾 GhanaRice ML</div>
         <div class="nav-items">
@@ -276,16 +289,16 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-
+# 4. Main App Container
 st.markdown("<div style='padding: 0px 40px;'>", unsafe_allow_html=True)
 
-
+# --- PAGE ROUTING ---
 
 if st.session_state['page'] == 'Home':
-   st.markdown("<div class='main-header'> Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
-   st.markdown("<div class='sub-header'>Enter early-stage growth measurements — get instant predictions on variety, traits, and stress classification</div>", unsafe_allow_html=True)
+    st.markdown("<div class='main-header'> Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
+    st.markdown("<div class='sub-header'>Enter early-stage growth measurements — get instant predictions on variety, traits, and stress classification</div>", unsafe_allow_html=True)
 
-st.markdown("""
+    st.markdown("""
         <div class="stats-wrapper">
             <div class="stat-box">
                 <div class="stat-number">18</div>
@@ -306,7 +319,7 @@ st.markdown("""
         </div>
     """, unsafe_allow_html=True)
 
-c1, c2, c3 = st.columns(3)
+    c1, c2, c3 = st.columns(3)
 
     with c1:
         st.markdown("""
@@ -335,13 +348,10 @@ c1, c2, c3 = st.columns(3)
             </div>
         """, unsafe_allow_html=True)
 
- st.markdown("</div>", unsafe_allow_html=True)
-
 elif st.session_state['page'] == 'Predict':
-    # 1. Define columns with proper 4-space indentation
-     col_left, col_right = st.columns([1, 1], gap="large")
+    col_left, col_right = st.columns([1, 1], gap="large")
 
-    # 2. Left Column (Inputs)
+    # Inputs Column
     with col_left:
         st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
         accession = st.selectbox("Accession", ["AGRA", "ADDO1", "GH10887", "Togbei"], index=0)
@@ -356,7 +366,7 @@ elif st.session_state['page'] == 'Predict':
         alive_feb21 = st.toggle("Alive at Feb 21", value=False)
         run_pred = st.button("Run prediction", use_container_width=True)
 
-    # 3. Right Column (Prediction Display Cards)
+    # Prediction Display Cards Column
     with col_right:
         st.markdown("""
             <div class="variety-card">
@@ -409,4 +419,5 @@ elif st.session_state['page'] == 'Batch':
 elif st.session_state['page'] == 'Dashboard':
     st.title("Model Dashboard")
 
+# Close main app container
 st.markdown("</div>", unsafe_allow_html=True)
