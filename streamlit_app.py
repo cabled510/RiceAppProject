@@ -159,7 +159,7 @@ with c1:
             </div>
         """, unsafe_allow_html=True)
 
-    with c2:
+with c2:
         st.markdown("""
             <div class="feature-card">
                 <div class="feature-icon-box"></div>
