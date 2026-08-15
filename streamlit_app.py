@@ -337,7 +337,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 if st.session_state['page'] == 'Predict':
       col_left, col_right = st.columns([1, 1], gap="large")
-
+    
     with col_left:
         st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
 
@@ -358,8 +358,6 @@ if st.session_state['page'] == 'Predict':
         run_pred = st.button("Run prediction", use_container_width=True)
 
     with col_right:
-
-        # 1. Variety Prediction Card
         st.markdown("""
             <div class="variety-card">
                 <span class="confidence-tag">78% confidence</span>
