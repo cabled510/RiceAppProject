@@ -16,11 +16,12 @@ st.markdown("""
 
     /* Top Navigation Bar Styling */
     .navbar {
-        background-color: #0b3c85;
-        padding: 12px 24px;
+        background-color: #0A2B7A;
+        padding: 0 1.25rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        height: 48px;
         margin-bottom: 30px;
         border-bottom: 2px solid #d4af37;
     }
