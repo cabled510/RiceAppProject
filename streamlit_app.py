@@ -335,7 +335,7 @@ with c3:
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-if st.session_state['page'] == 'Predict':
+elif st.session_state['page'] == 'Predict':
    col_left, col_right = st.columns([1, 1], gap="large")
     
 with col_left:
