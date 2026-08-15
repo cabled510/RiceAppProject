@@ -22,7 +22,7 @@ st.markdown("""
         padding: 0 1.25rem;
         border-bottom: 2px solid #caa052;
         margin-bottom: 30px;
-        height: 48px;
+        height: 59px;
     }
 
     .nav-brand {
