@@ -59,6 +59,33 @@ st.markdown("""
         font-size: 0.85rem;
         color: #555555;
     }
+
+    /* Feature Grid Section */
+    .feature-card {
+        padding: 0px 10px;
+    }
+    .feature-icon-box {
+        width: 44px;
+        height: 44px;
+        background-color: #eef4fc; /* Light blue tint matching the screenshot */
+        border-radius: 2px;
+        margin-bottom: 18px;
+    }
+    .feature-title {
+        font-size: 1.15rem;
+        font-weight: 500;
+        color: #111111;
+        font-family: serif, 'Times New Roman';
+        margin-bottom: 8px;
+        line-height: 1.2;
+    }
+    .feature-desc {
+        font-size: 0.95rem;
+        color: #111111;
+        font-family: serif, 'Times New Roman';
+        line-height: 1.45;
+        max-width: 280px;
+    }
     
     </style>
 """, unsafe_allow_html=True)
@@ -121,3 +148,31 @@ st.markdown("""
             </div>
         </div>
     """, unsafe_allow_html=True)
+
+
+with c1:
+        st.markdown("""
+            <div class="feature-card">
+                <div class="feature-icon-box"></div>
+                <div class="feature-title">Single prediction</div>
+                <div class="feature-desc">Enter one plant's measurements and get variety, trait, and stress predictions instantly</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with c2:
+        st.markdown("""
+            <div class="feature-card">
+                <div class="feature-icon-box"></div>
+                <div class="feature-title">Batch upload</div>
+                <div class="feature-desc">Upload a CSV of multiple plants and download an Excel file of all predictions</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with c3:
+        st.markdown("""
+            <div class="feature-card">
+                <div class="feature-icon-box"></div>
+                <div class="feature-title">Model dashboard</div>
+                <div class="feature-desc">View performance metrics and feature importance for all six trained algorithms</div>
+            </div>
+        """, unsafe_allow_html=True)
