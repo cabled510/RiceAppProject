@@ -26,7 +26,7 @@ st.markdown("""
         font-size: 1.1rem;
         color: var(--text-secondary);
         text-align: center;
-        margin-bottom: 1.5rem;
+        margin-bottom: 2.813rem;
     }
     .metric-card {
         background-color: #f8f9fa;
