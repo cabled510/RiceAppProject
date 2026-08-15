@@ -306,9 +306,9 @@ st.markdown("""
         </div>
     """, unsafe_allow_html=True)
 
-c1, c2, c3 = st.columns(3)
+     c1, c2, c3 = st.columns(3)
 
-with c1:
+     with c1:
         st.markdown("""
             <div class="feature-card">
                 <div class="feature-icon-box"></div>
@@ -317,7 +317,7 @@ with c1:
             </div>
         """, unsafe_allow_html=True)
 
- with c2:
+      with c2:
         st.markdown("""
             <div class="feature-card">
                 <div class="feature-icon-box"></div>
@@ -326,7 +326,7 @@ with c1:
             </div>
         """, unsafe_allow_html=True)
 
- with c3:
+       with c3:
         st.markdown("""
             <div class="feature-card">
                 <div class="feature-icon-box"></div>
@@ -335,7 +335,7 @@ with c1:
             </div>
         """, unsafe_allow_html=True)
 
-st.markdown("</div>", unsafe_allow_html=True)
+ st.markdown("</div>", unsafe_allow_html=True)
 
 elif st.session_state['page'] == 'Predict':
     # 1. Define columns with proper 4-space indentation
