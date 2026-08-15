@@ -16,10 +16,13 @@ st.markdown("""
 
     /* Full-width dark blue navigation wrapper */
     .nav-wrapper {
-        background-color: #0b2f6b;
-        padding: 16px 20px;
+        background: #0A2B7A;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 1.25rem;
         border-bottom: 2px solid #caa052;
         margin-bottom: 30px;
+        height: 48px;
     }
 
     /* Style Streamlit buttons inside the navigation bar columns */
