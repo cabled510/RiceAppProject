@@ -148,6 +148,12 @@ st.markdown(f"""
 
 st.markdown("<div style='padding: 0px 40px;'>", unsafe_allow_html=True)
 
+if 'page' not in st.session_state:
+    st.session_state['page'] = 'Home'
+
+# Helper function to switch pages
+def set_page(page_name):
+    st.session_state['page'] = page_name
 
 if st.session_state['page'] == 'Home':
    st.markdown("<div class='main-header'> Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
@@ -202,6 +208,5 @@ with c3:
                 <div class="feature-desc">View performance metrics and feature importance for all six trained algorithms</div>
             </div>
         """, unsafe_allow_html=True)
-
 
 st.markdown("</div>", unsafe_allow_html=True)
