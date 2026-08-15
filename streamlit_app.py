@@ -48,6 +48,7 @@ st.markdown("""
         font-size: 0.85rem;
         color: #555555;
     }
+    
     </style>
 """, unsafe_allow_html=True)
 
