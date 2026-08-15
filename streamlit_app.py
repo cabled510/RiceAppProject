@@ -428,9 +428,7 @@ elif st.session_state['page'] == 'Batch':
             type=["csv", "xlsx"], 
             label_visibility="visible"
         )
-
-    </div>
-    """, unsafe_allow_html=True)
+      """, unsafe_allow_html=True)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
@@ -439,7 +437,7 @@ elif st.session_state['page'] == 'Batch':
 
     with prev_col1:
         st.markdown(
-            "<div class='preview-header-text'>Results preview — 5 of 120 plants</div>", 
+            "<div class='preview-header-text'>Results preview — 0 of 120 plants</div>", 
             unsafe_allow_html=True
         )
 
