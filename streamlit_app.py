@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+# Helper function to switch pages
+def set_page(page_name):
+    st.session_state['page'] = page_name
 
 st.set_page_config(
     page_title="Ghanaian Rice Germplasm Intelligence Hub",
@@ -275,9 +278,6 @@ if "page" in query_params:
 elif 'page' not in st.session_state:
     st.session_state['page'] = 'Home'
 
-# Helper function to switch pages
-def set_page(page_name):
-    st.session_state['page'] = page_name
 
 if st.session_state['page'] == 'Home':
    st.markdown("<div class='main-header'> Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
