@@ -150,8 +150,8 @@ st.markdown("<div style='padding: 0px 40px;'>", unsafe_allow_html=True)
 
 
 if st.session_state['page'] == 'Home':
-  st.markdown("<div class='main-header'> Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
-  st.markdown("<div class='sub-header'>Enter early-stage growth measurements — get instant predictions on variety, traits, and stress classification</div>", unsafe_allow_html=True)
+   st.markdown("<div class='main-header'> Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
+   st.markdown("<div class='sub-header'>Enter early-stage growth measurements — get instant predictions on variety, traits, and stress classification</div>", unsafe_allow_html=True)
 
 st.markdown("""
         <div class="stats-wrapper">
