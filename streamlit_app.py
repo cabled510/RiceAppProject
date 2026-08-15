@@ -269,7 +269,10 @@ st.markdown(f"""
 
 st.markdown("<div style='padding: 0px 40px;'>", unsafe_allow_html=True)
 
-if 'page' not in st.session_state:
+query_params = st.query_params
+if "page" in query_params:
+    st.session_state['page'] = query_params["page"]
+elif 'page' not in st.session_state:
     st.session_state['page'] = 'Home'
 
 # Helper function to switch pages
