@@ -210,3 +210,7 @@ with c3:
         """, unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
+
+
+
+elif st.session_state['page'] == 'Predict':
