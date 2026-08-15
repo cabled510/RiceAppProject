@@ -22,7 +22,7 @@ st.markdown("""
         padding: 0 1.25rem;
         border-bottom: 2px solid #caa052;
         margin-bottom: 30px;
-        height: 59px;
+        height: 69px;
     }
 
     .nav-brand {
@@ -334,8 +334,6 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 
 elif st.session_state.get('page') == 'Predict':
-
-    # 2-Column Layout (Left: Inputs, Right: Predictions)
     col_left, col_right = st.columns([1, 1], gap="large")
 
     # -------------------------------------------------------------------------
