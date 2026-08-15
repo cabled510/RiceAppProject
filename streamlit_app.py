@@ -26,13 +26,6 @@ st.markdown("""
         border-bottom: 2px solid #d4af37;
     }
     
-    .nav-brand {
-        color: white;
-        font-size: 1.2rem;
-        font-weight: 600;
-        font-family: serif;
-    }
-    
     .main-header {
         font-size: 1.375rem;
         color: #0A2B7A;
