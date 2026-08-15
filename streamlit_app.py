@@ -325,7 +325,7 @@ if st.session_state['page'] == 'Home':
 
 # --- PREDICT PAGE ---
 elif st.session_state['page'] == 'Predict':
-    col_left, col_right = st.columns([1, 1], gap="medium")
+    col_left, col_right = st.columns([0.15, 1, 1.1], gap="medium")
 
     with col_left:
         st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
