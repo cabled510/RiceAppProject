@@ -133,7 +133,6 @@ st.markdown("""
         color: #111111;
         font-family: serif, 'Times New Roman';
         line-height: 1.45;
-        max-width: 280px;
     }
 
     /* Predict Page Cards */
