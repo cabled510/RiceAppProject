@@ -24,13 +24,6 @@ st.markdown("""
         margin-bottom: 30px;
         border-bottom: 2px solid #d4af37;
     }
-
-    .nav-container {
-        background-color: #0b3c85;
-        padding: 10px 20px;
-        margin-bottom: 25px;
-        border-bottom: 3px solid #d4af37;
-    }
     
     .nav-brand {
         color: white;
@@ -68,7 +61,7 @@ if 'page' not in st.session_state:
 def set_page(page_name):
     st.session_state['page'] = page_name
 
-st.markdown("<div class='nav-container'>", unsafe_allow_html=True)
+st.markdown("<div class='navbar'>", unsafe_allow_html=True)
 nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
 
 with nav_col1:
