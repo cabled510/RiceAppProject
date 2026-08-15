@@ -36,6 +36,15 @@ st.markdown("""
     }
 
     /* Metric Stat Box */
+
+    ..stats-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+    
     .stat-box {
         text-align: center;
         margin-bottom: 50px;
@@ -92,15 +101,23 @@ if st.session_state['page'] == 'Home':
   st.markdown("<div class='main-header'> Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
   st.markdown("<div class='sub-header'>Enter early-stage growth measurements — get instant predictions on variety, traits, and stress classification</div>", unsafe_allow_html=True)
 
-
-  m1, m2, m3, m4 = st.columns(4)
-  with m1:
-        st.markdown("<div class='stat-box'><div class='stat-number'>18</div><div class='stat-label'>accessions</div></div>", unsafe_allow_html=True)
-  with m2:
-        st.markdown("<div class='stat-box'><div class='stat-number'>720</div><div class='stat-label'>observations</div></div>", unsafe_allow_html=True)
-  with m3:
-        st.markdown("<div class='stat-box'><div class='stat-number'>6</div><div class='stat-label'>algorithms</div></div>", unsafe_allow_html=True)
-  with m4:
-        st.markdown("<div class='stat-box'><div class='stat-number'>98.1%</div><div class='stat-label'>best F1 (task C)</div></div>", unsafe_allow_html=True)
-
-st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown("""
+        <div class="stats-wrapper">
+            <div class="stat-container">
+                <div class="stat-number">18</div>
+                <div class="stat-label">accessions</div>
+            </div>
+            <div class="stat-container">
+                <div class="stat-number">720</div>
+                <div class="stat-label">observations</div>
+            </div>
+            <div class="stat-container">
+                <div class="stat-number">6</div>
+                <div class="stat-label">algorithms</div>
+            </div>
+            <div class="stat-container">
+                <div class="stat-number">98.1%</div>
+                <div class="stat-label">best F1 (task C)</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
