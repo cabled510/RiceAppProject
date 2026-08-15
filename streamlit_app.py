@@ -1,12 +1,3 @@
-Here is your complete script fully cleaned, restructured, and properly indented so it runs without any `SyntaxError`.
-
-### Key Corrections Made
-
-1. **Fixed Broken Indentation:** Under `if st.session_state['page'] == 'Home':`, the statistical numbers, feature grid columns (`with c1:`, etc.), and closing tags were indented outside the `if` block, breaking the execution chain before `elif st.session_state['page'] == 'Predict':`.
-2. **Standardized Formatting:** Enforced strict 4-space Python indentation throughout all conditional blocks and `with` statements.
-3. **Cleaned Non-Breaking Spaces:** Replaced invalid invisible characters/non-breaking spaces with standard spaces.
-
-```python
 import streamlit as st
 import pandas as pd
 import numpy as np
