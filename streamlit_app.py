@@ -358,7 +358,7 @@ with col_left:
     run_pred = st.button("Run prediction", use_container_width=True)
 
 with col_right:
-     st.markdown("""
+    st.markdown("""
             <div class="variety-card">
                 <span class="confidence-tag">78% confidence</span>
                 <div class="card-label">VARIETY PREDICTION</div>
@@ -368,7 +368,7 @@ with col_right:
         """, unsafe_allow_html=True)
 
         # 2. Trait Predictions Card
-        st.markdown("""
+    st.markdown("""
             <div class="trait-card">
                 <span class="confidence-tag" style="background-color: #f5f5f5; color: #555;">R² 0.82</span>
                 <div class="card-label">TRAIT PREDICTIONS</div>
@@ -394,7 +394,7 @@ with col_right:
         """, unsafe_allow_html=True)
 
         # 3. Treatment Group Card
-        st.markdown("""
+    st.markdown("""
             <div class="treatment-card">
                 <span class="confidence-tag">97% confidence</span>
                 <div class="card-label">TREATMENT GROUP</div>
