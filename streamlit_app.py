@@ -244,6 +244,33 @@ st.markdown("""
         height: 2.8rem !important;
         margin-top: 15px;
     }
+
+
+    .upload-dropzone {
+            border: 1px dashed #d0d0d0;
+            border-radius: 4px;
+            padding: 40px 20px;
+            text-align: center;
+            background-color: #fafafa;
+            margin-bottom: 40px;
+        }
+        .upload-title {
+            font-family: serif, 'Times New Roman';
+            font-size: 1.25rem;
+            color: #111111;
+            margin-bottom: 8px;
+        }
+        .upload-subtitle {
+            font-family: serif, 'Times New Roman';
+            font-size: 0.95rem;
+            color: #444444;
+            margin-bottom: 20px;
+        }
+        .preview-header-text {
+            font-family: serif, 'Times New Roman';
+            font-size: 1.15rem;
+            color: #111111;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -388,8 +415,35 @@ elif st.session_state['page'] == 'Predict':
 
 # --- BATCH PAGE ---
 elif st.session_state['page'] == 'Batch':
-    st.title("Batch Upload")
-    st.write("Upload a CSV file containing early growth parameters to generate predictions in bulk.")
+    st.markdown("""
+        <div class="upload-dropzone">
+            <div class="upload-title">Drop your CSV or Excel file here</div>
+            <div class="upload-subtitle">Required columns: Accession, Treatment, Base_Height, H_Feb04, H_Feb14, Alive_Feb14</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Row for file upload & template download triggers
+    u_col1, u_col2, u_col3 = st.columns([1, 2, 1])
+    with u_col2:
+        file_uploaded = st.file_uploader(
+            "Browse file or download template ↓", 
+            type=["csv", "xlsx"], 
+            label_visibility="visible"
+        )
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # 3. Bottom Preview Bar & Download Button
+    prev_col1, prev_col2 = st.columns([3, 1], gap="large")
+
+    with prev_col1:
+        st.markdown(
+            "<div class='preview-header-text'>Results preview — 5 of 120 plants</div>", 
+            unsafe_allow_html=True
+        )
+
+    with prev_col2:
+        st.button("Download Excel", key="btn_download_excel", use_container_width=True)
 
 # --- DASHBOARD PAGE ---
 elif st.session_state['page'] == 'Dashboard':
