@@ -41,7 +41,7 @@ st.markdown("""
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 2.813rem;
+        gap: 3.25rem;
         margin-bottom: 40px;
     }
     
