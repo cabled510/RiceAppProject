@@ -253,6 +253,16 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Helper function to switch pages
+def set_page(page_name):
+    st.session_state['page'] = page_name
+
+query_params = st.query_params
+if "page" in query_params:
+    st.session_state['page'] = query_params["page"]
+elif 'page' not in st.session_state:
+    st.session_state['page'] = 'Home'
+
 
 st.markdown(f"""
     <div class="nav-wrapper">
@@ -269,15 +279,6 @@ st.markdown(f"""
 
 st.markdown("<div style='padding: 0px 40px;'>", unsafe_allow_html=True)
 
-# Helper function to switch pages
-def set_page(page_name):
-    st.session_state['page'] = page_name
-
-query_params = st.query_params
-if "page" in query_params:
-    st.session_state['page'] = query_params["page"]
-elif 'page' not in st.session_state:
-    st.session_state['page'] = 'Home'
 
 
 if st.session_state['page'] == 'Home':
