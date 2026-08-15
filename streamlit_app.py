@@ -88,7 +88,7 @@ with nav_col5:
         set_page("Dashboard")
         st.rerun()
 
-st.markdown("<div style='border-bottom: 2px solid #d4af37; margin-bottom: 25px;'></div>", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
 
 if st.session_state['page'] == 'Home':
   st.markdown("<div class='main-header'>🌾 Ghanaian Rice Germplasm ML Predictor</div>", unsafe_allow_html=True)
