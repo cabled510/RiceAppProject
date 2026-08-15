@@ -298,7 +298,6 @@ if st.session_state['page'] == 'Home':
                 <div class="feature-desc">Enter one plant's measurements and get variety, trait, and stress predictions instantly</div>
             </div>
         """, unsafe_allow_html=True)
-        st.button("Go to Single Prediction →", key="go_pred", on_click=set_page, args=("Predict",))
 
     with c2:
         st.markdown("""
@@ -308,7 +307,7 @@ if st.session_state['page'] == 'Home':
                 <div class="feature-desc">Upload a CSV of multiple plants and download an Excel file of all predictions</div>
             </div>
         """, unsafe_allow_html=True)
-        st.button("Go to Batch Upload →", key="go_batch", on_click=set_page, args=("Batch",))
+       
 
     with c3:
         st.markdown("""
@@ -318,7 +317,7 @@ if st.session_state['page'] == 'Home':
                 <div class="feature-desc">View performance metrics and feature importance for all six trained algorithms</div>
             </div>
         """, unsafe_allow_html=True)
-        st.button("View Dashboard →", key="go_dash", on_click=set_page, args=("Dashboard",))
+        
 
 # --- PREDICT PAGE ---
 elif st.session_state['page'] == 'Predict':
