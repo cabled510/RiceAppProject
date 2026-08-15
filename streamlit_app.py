@@ -93,7 +93,7 @@ st.markdown("""
     .stats-wrapper {
         display: flex;
         justify-content: center;
-        gap: 40px;
+        gap: 62px;
         margin-bottom: 50px;
     }
     .stat-box { text-align: center; }
