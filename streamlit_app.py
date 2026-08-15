@@ -108,7 +108,11 @@ st.markdown("""
         font-size: 0.95rem;
         color: #555555;
     }
-    .feature-card { padding: 0px 10px; }
+    .feature-card {
+    padding: 0px 10px; 
+    margin-left:20px;
+    }
+    
     .feature-icon-box {
         width: 44px;
         height: 44px;
