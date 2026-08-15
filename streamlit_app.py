@@ -336,10 +336,10 @@ with c3:
 st.markdown("</div>", unsafe_allow_html=True)
 
 if st.session_state['page'] == 'Predict':
-      col_left, col_right = st.columns([1, 1], gap="large")
+   col_left, col_right = st.columns([1, 1], gap="large")
     
 with col_left:
-        st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
+     st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
 
         accession = st.selectbox("Accession", ["AGRA", "ADDO1", "GH10887", "Togbei"], index=0)
         treatment = st.selectbox("Treatment", ["Control", "Stress"], index=0)
@@ -358,7 +358,7 @@ with col_left:
         run_pred = st.button("Run prediction", use_container_width=True)
 
 with col_right:
-        st.markdown("""
+     st.markdown("""
             <div class="variety-card">
                 <span class="confidence-tag">78% confidence</span>
                 <div class="card-label">VARIETY PREDICTION</div>
