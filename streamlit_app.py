@@ -257,10 +257,7 @@ st.markdown("""
 def set_page(page_name):
     st.session_state['page'] = page_name
 
-query_params = st.query_params
-if "page" in query_params:
-    st.session_state['page'] = query_params["page"]
-elif 'page' not in st.session_state:
+if 'page' not in st.session_state:
     st.session_state['page'] = 'Home'
 
 
