@@ -37,7 +37,7 @@ st.markdown("""
 
     /* Metric Stat Box */
 
-    ..stats-wrapper {
+    .stats-wrapper {
         display: flex;
         justify-content: center;
         align-items: center;
