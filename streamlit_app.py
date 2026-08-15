@@ -74,16 +74,16 @@ st.markdown("""
     .feature-title {
         font-size: 1.15rem;
         font-weight: 500;
-        color: #111111;
+        color: var(--text-primary);
         font-family: serif, 'Times New Roman';
-        margin-bottom: 8px;
+        margin-bottom: 4px;
         line-height: 1.2;
     }
     .feature-desc {
         font-size: 0.95rem;
-        color: #111111;
+        color: var(--text-secondary);
         font-family: serif, 'Times New Roman';
-        line-height: 1.45;
+        line-height: 1.5;
         max-width: 280px;
     }
     
