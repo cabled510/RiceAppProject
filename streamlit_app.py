@@ -24,6 +24,14 @@ st.markdown("""
         margin-bottom: 30px;
         border-bottom: 2px solid #d4af37;
     }
+
+    .nav-container {
+        background-color: #0b3c85;
+        padding: 10px 20px;
+        margin-bottom: 25px;
+        border-bottom: 3px solid #d4af37;
+    }
+    
     .nav-brand {
         color: white;
         font-size: 1.2rem;
@@ -60,10 +68,11 @@ if 'page' not in st.session_state:
 def set_page(page_name):
     st.session_state['page'] = page_name
 
+st.markdown("<div class='nav-container'>", unsafe_allow_html=True)
 nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
 
 with nav_col1:
-    st.markdown("<div style='background-color:#0b3c85; padding:12px; font-size:1.2rem; font-weight:600; color:white; font-family:serif;'>GhanaRice ML</div>", unsafe_allow_html=True)
+    st.markdown("<div style= padding:12px; font-size:1.2rem; font-weight:600; color:white; font-family:serif;'>GhanaRice ML</div>", unsafe_allow_html=True)
 
 with nav_col2:
     if st.button("Home", key="btn_home", use_container_width=True, type="primary" if st.session_state['page'] == 'Home' else "secondary"):
