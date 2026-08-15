@@ -415,12 +415,15 @@ elif st.session_state['page'] == 'Predict':
 
 # --- BATCH PAGE ---
 elif st.session_state['page'] == 'Batch':
+    # 1. Custom HTML header banner
     st.markdown("""
         <div class="upload-dropzone">
             <div class="upload-title">Drop your CSV or Excel file here</div>
             <div class="upload-subtitle">Required columns: Accession, Treatment, Base_Height, H_Feb04, H_Feb14, Alive_Feb14</div>
+        </div>
+    """, unsafe_allow_html=True)
 
-    # Row for file upload & template download triggers
+    # 2. Python Streamlit columns for centered file upload
     u_col1, u_col2, u_col3 = st.columns([1, 2, 1])
     with u_col2:
         file_uploaded = st.file_uploader(
@@ -428,7 +431,6 @@ elif st.session_state['page'] == 'Batch':
             type=["csv", "xlsx"], 
             label_visibility="visible"
         )
-      """, unsafe_allow_html=True)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
