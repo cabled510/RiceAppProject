@@ -38,11 +38,13 @@ st.markdown("""
     /* Metric Stat Box */
     .stat-box {
         text-align: center;
+        margin-bottom: 50px;
     }
     .stat-number {
         font-size: 1.6rem;
         font-weight: 700;
         color: #0b3c85;
+        line-height: 1.1;
     }
     .stat-label {
         font-size: 0.85rem;
@@ -92,13 +94,13 @@ if st.session_state['page'] == 'Home':
 
 
   m1, m2, m3, m4 = st.columns(4)
-    with m1:
+  with m1:
         st.markdown("<div class='stat-box'><div class='stat-number'>18</div><div class='stat-label'>accessions</div></div>", unsafe_allow_html=True)
-    with m2:
+  with m2:
         st.markdown("<div class='stat-box'><div class='stat-number'>720</div><div class='stat-label'>observations</div></div>", unsafe_allow_html=True)
-    with m3:
+  with m3:
         st.markdown("<div class='stat-box'><div class='stat-number'>6</div><div class='stat-label'>algorithms</div></div>", unsafe_allow_html=True)
-    with m4:
+  with m4:
         st.markdown("<div class='stat-box'><div class='stat-number'>98.1%</div><div class='stat-label'>best F1 (task C)</div></div>", unsafe_allow_html=True)
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown("<br><br>", unsafe_allow_html=True)
