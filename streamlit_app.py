@@ -337,7 +337,7 @@ with c3:
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-if st.session_state['page'] == 'Predict':
+elif st.session_state['page'] == 'Predict':
     # 1. Define columns with proper 4-space indentation
     col_left, col_right = st.columns([1, 1], gap="large")
 
@@ -402,5 +402,11 @@ if st.session_state['page'] == 'Predict':
                 </div>
             </div>
         """, unsafe_allow_html=True)
+
+elif st.session_state['page'] == 'Batch':
+    st.title("Batch Prediction")
+
+elif st.session_state['page'] == 'Dashboard':
+    st.title("Model Dashboard")
 
 st.markdown("</div>", unsafe_allow_html=True)
