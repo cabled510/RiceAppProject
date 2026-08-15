@@ -142,6 +142,7 @@ st.markdown("""
         font-weight: 500;
         color: #111111;
         margin-bottom: 12px;
+        padding-left: 29px;
     }
     .variety-card {
         border-left: 3px solid #1a4380;
