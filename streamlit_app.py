@@ -103,19 +103,19 @@ if st.session_state['page'] == 'Home':
 
 st.markdown("""
         <div class="stats-wrapper">
-            <div class="stat-container">
+            <div class="stat-box">
                 <div class="stat-number">18</div>
                 <div class="stat-label">accessions</div>
             </div>
-            <div class="stat-container">
+            <div class="stat-box">
                 <div class="stat-number">720</div>
                 <div class="stat-label">observations</div>
             </div>
-            <div class="stat-container">
+            <div class="stat-box">
                 <div class="stat-number">6</div>
                 <div class="stat-label">algorithms</div>
             </div>
-            <div class="stat-container">
+            <div class="stat-box">
                 <div class="stat-number">98.1%</div>
                 <div class="stat-label">best F1 (task C)</div>
             </div>
