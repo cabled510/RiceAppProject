@@ -2,9 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-# Helper function to switch pages
-def set_page(page_name):
-    st.session_state['page'] = page_name
 
 st.set_page_config(
     page_title="Ghanaian Rice Germplasm Intelligence Hub",
@@ -271,6 +268,10 @@ st.markdown(f"""
 
 
 st.markdown("<div style='padding: 0px 40px;'>", unsafe_allow_html=True)
+
+# Helper function to switch pages
+def set_page(page_name):
+    st.session_state['page'] = page_name
 
 query_params = st.query_params
 if "page" in query_params:
