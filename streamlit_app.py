@@ -50,10 +50,7 @@ st.markdown("""
         color: #ffffff; 
         background-color: rgba(255, 255, 255, 0.1) !important;
     }
-    </style>
-""", unsafe_allow_html=True)
 
-    
     .main-header {
         font-size: 1.375rem;
         color: #0A2B7A;
