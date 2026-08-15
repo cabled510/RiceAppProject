@@ -136,10 +136,10 @@ st.markdown(f"""
     <div class="nav-wrapper">
         <div class="nav-brand">🌾 GhanaRice ML</div>
         <div class="nav-items">
-            <a class="nav-link" href="?page=Home" target="_self">Home</a>
-            <a class="nav-link" href="?page=Predict" target="_self">Predict</a>
-            <a class="nav-link" href="?page=Batch" target="_self">Batch</a>
-            <a class="nav-link" href="?page=Dashboard" target="_self">Dashboard</a>
+            <div class="nav-link" href="?page=Home" target="_self">Home</div>
+            <div class="nav-link" href="?page=Predict" target="_self">Predict</a>
+            <div class="nav-link" href="?page=Batch" target="_self">Batch</a>
+            <div class="nav-link" href="?page=Dashboard" target="_self">Dashboard</div>
         </div>
     </div>
 """, unsafe_allow_html=True)
