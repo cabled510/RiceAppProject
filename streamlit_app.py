@@ -235,7 +235,7 @@ st.markdown("""
 
     /* Submit Button */
     div.stButton > button:not(div[data-testid="stHorizontalBlock"] button) {
-        background-color: #0b2f6b !important;
+        background-color: #0A2B7A;
         color: white !important;
         border: none !important;
         border-radius: 2px !important;
@@ -340,7 +340,7 @@ elif st.session_state['page'] == 'Predict':
         alive_feb14 = st.toggle("Alive at Feb 14", value=True)
         alive_feb21 = st.toggle("Alive at Feb 21", value=False)
 
-        st.button("Run prediction", use_container_width=True)
+        st.button("Run Prediction", use_container_width=True)
 
     with col_right:
         st.markdown("""
