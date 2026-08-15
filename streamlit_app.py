@@ -14,17 +14,6 @@ st.set_page_config(
 st.markdown("""
     <style>
 
-    /* Top Navigation Bar Styling */
-    .navbar {
-        background-color: #0A2B7A;
-        padding: 0 1.25rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 108px;
-        margin-bottom: 30px;
-        border-bottom: 2px solid #d4af37;
-    }
     
     .main-header {
         font-size: 1.375rem;
@@ -55,7 +44,6 @@ if 'page' not in st.session_state:
 def set_page(page_name):
     st.session_state['page'] = page_name
 
-st.markdown("<div class='navbar'>", unsafe_allow_html=True)
 nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([4, 1, 1, 1, 1])
 
 with nav_col1:
