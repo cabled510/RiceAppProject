@@ -568,7 +568,7 @@ elif st.session_state['page'] == 'Batch':
 # --- DASHBOARD PAGE ---
 elif st.session_state['page'] == 'Dashboard':
     # 1. Top Metrics Summary Row (No numeric values)
-    m_col1, m_col2, m_col3, m_col4 = st.columns(4)
+    left_space, m_col1, m_col2, m_col3, m_col4 = st.columns([0.5, 2.25, 2.25, 2.25, 2.25], gap="small")
 
     with m_col1:
         st.markdown("""
@@ -605,7 +605,7 @@ elif st.session_state['page'] == 'Dashboard':
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # 2. Task Switcher Navigation Tabs Row
-    left_space, t_col1, t_col2, t_col3, t_spacer = st.columns([0.3, 1.5, 1.5, 1.5, 5.5])
+    left_space, t_col1, t_col2, t_col3, t_spacer = st.columns([0.05, 1.5, 1.5, 1.5, 5.5])
 
     # Invisible target div for applying task tab styling
     with t_col1:
