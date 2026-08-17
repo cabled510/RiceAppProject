@@ -10,12 +10,18 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Initialize Session State Page Navigation
+# Initialize Session State Page Navigation & Dashboard Task Tab
 if 'page' not in st.session_state:
     st.session_state['page'] = 'Home'
 
+if 'dash_task' not in st.session_state:
+    st.session_state['dash_task'] = 'Task C — treatment'
+
 def set_page(page_name):
     st.session_state['page'] = page_name
+
+def set_dash_task(task_name):
+    st.session_state['dash_task'] = task_name
 
 st.markdown("""
     <style>
@@ -262,7 +268,6 @@ st.markdown("""
         margin-bottom: 16px;
     }
     
-    /* Center align Streamlit File Uploader widget */
     div[data-testid="stFileUploader"] {
         width: 100% !important;
         max-width: 420px !important;
@@ -279,7 +284,7 @@ st.markdown("""
         color: #111111;
     }
 
-    /* Batch Page Table & Badge Styling */
+    /* Tables & Badges */
     .batch-table {
         width: 100%;
         border-collapse: collapse;
@@ -315,6 +320,24 @@ st.markdown("""
     .pill-stress {
         background-color: #fbe9e7;
         color: #d84315;
+    }
+
+    /* Dashboard Page Header Task Buttons */
+    div[data-testid="stHorizontalBlock"]:has(div.dash-task-target) button {
+        background-color: transparent !important;
+        color: #222222 !important;
+        border: none !important;
+        font-family: serif, 'Times New Roman', Times !important;
+        font-size: 1.05rem !important;
+        box-shadow: none !important;
+        height: 2.4rem !important;
+        border-radius: 0px !important;
+        margin-top: 0px !important;
+    }
+    div[data-testid="stHorizontalBlock"]:has(div.dash-task-target) button[kind="primary"] {
+        color: #ffffff !important;
+        background-color: #0b2f6b !important;
+        font-weight: 500 !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -458,7 +481,6 @@ elif st.session_state['page'] == 'Predict':
 
 # --- BATCH PAGE ---
 elif st.session_state['page'] == 'Batch':
-    # 1. Centered Header Text Section
     st.markdown("""
         <div class="upload-container">
             <div class="upload-title">Drop your CSV or Excel file here</div>
@@ -466,7 +488,6 @@ elif st.session_state['page'] == 'Batch':
         </div>
     """, unsafe_allow_html=True)
 
-    # 2. Centered File Uploader Control
     file_uploaded = st.file_uploader(
         "Browse file or download template ↓", 
         type=["csv", "xlsx"], 
@@ -475,7 +496,6 @@ elif st.session_state['page'] == 'Batch':
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    # 3. Preview Bar Header & Download Button
     prev_col1, prev_col2 = st.columns([3, 1], gap="large")
 
     with prev_col1:
@@ -487,7 +507,6 @@ elif st.session_state['page'] == 'Batch':
     with prev_col2:
         st.button("Download Excel", key="btn_download_excel", use_container_width=True)
 
-    # 4. Replicated HTML Data Table with Styled Pill Badges
     st.markdown("""
         <table class="batch-table">
             <thead>
@@ -547,7 +566,130 @@ elif st.session_state['page'] == 'Batch':
 
 # --- DASHBOARD PAGE ---
 elif st.session_state['page'] == 'Dashboard':
-    st.title("Model Dashboard")
-    st.write("Explore machine learning model metrics, confusion matrices, and feature importance rankings.")
+    # 1. Top Metrics Summary Row (No numeric values)
+    m_col1, m_col2, m_col3, m_col4 = st.columns(4)
+
+    with m_col1:
+        st.markdown("""
+            <div>
+                <div style="font-family: serif, 'Times New Roman'; font-size: 2.2rem; font-weight: 400; color: #111111;">—</div>
+                <div style="font-family: serif, 'Times New Roman'; font-size: 0.95rem; color: #333333;">Best F1 — treatment (Algorithm)</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with m_col2:
+        st.markdown("""
+            <div>
+                <div style="font-family: serif, 'Times New Roman'; font-size: 2.2rem; font-weight: 400; color: #111111;">—</div>
+                <div style="font-family: serif, 'Times New Roman'; font-size: 0.95rem; color: #333333;">Best R² — height (Algorithm)</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with m_col3:
+        st.markdown("""
+            <div>
+                <div style="font-family: serif, 'Times New Roman'; font-size: 2.2rem; font-weight: 400; color: #111111;">—</div>
+                <div style="font-family: serif, 'Times New Roman'; font-size: 0.95rem; color: #333333;">Best F1 — accession (Algorithm)</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with m_col4:
+        st.markdown("""
+            <div>
+                <div style="font-family: serif, 'Times New Roman'; font-size: 2.2rem; font-weight: 400; color: #111111;">—</div>
+                <div style="font-family: serif, 'Times New Roman'; font-size: 0.95rem; color: #333333;">Algorithms compared</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # 2. Task Switcher Navigation Tabs Row
+    t_col1, t_col2, t_col3, t_spacer = st.columns([1.5, 1.5, 1.5, 5.5])
+
+    # Invisible target div for applying task tab styling
+    with t_col1:
+        st.markdown("<div class='dash-task-target'></div>", unsafe_allow_html=True)
+        st.button(
+            "Task C — treatment", 
+            key="btn_task_c", 
+            use_container_width=True,
+            type="primary" if st.session_state['dash_task'] == 'Task C — treatment' else "secondary",
+            on_click=set_dash_task, 
+            args=("Task C — treatment",)
+        )
+
+    with t_col2:
+        st.button(
+            "Task A — accession", 
+            key="btn_task_a", 
+            use_container_width=True,
+            type="primary" if st.session_state['dash_task'] == 'Task A — accession' else "secondary",
+            on_click=set_dash_task, 
+            args=("Task A — accession",)
+        )
+
+    with t_col3:
+        st.button(
+            "Task B — traits", 
+            key="btn_task_b", 
+            use_container_width=True,
+            type="primary" if st.session_state['dash_task'] == 'Task B — traits' else "secondary",
+            on_click=set_dash_task, 
+            args=("Task B — traits",)
+        )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # 3. Model Results Table (No results, no values, no bars)
+    st.markdown("""
+        <table class="batch-table">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                    <th>Weighted F1</th>
+                    <th>Cohen's kappa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>XGBoost</b></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>Random Forest</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>SVM (RBF)</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>KNN</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>Logistic Regression</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>Neural Network</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                </tr>
+            </tbody>
+        </table>
+    """, unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
