@@ -605,7 +605,7 @@ elif st.session_state['page'] == 'Dashboard':
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # 2. Task Switcher Navigation Tabs Row
-    t_col1, t_col2, t_col3, t_spacer = st.columns([1.5, 1.5, 1.5, 5.5])
+    left_space, t_col1, t_col2, t_col3, t_spacer = st.columns([0.5, 1.5, 1.5, 1.5, 5.5])
 
     # Invisible target div for applying task tab styling
     with t_col1:
