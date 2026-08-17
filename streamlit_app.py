@@ -47,7 +47,6 @@ st.markdown("""
         font-weight: 400;
         line-height: 2.2rem;
         display: flex;
-        
     }
 
     /* Style Streamlit Navigation Buttons */
@@ -109,8 +108,8 @@ st.markdown("""
         color: #555555;
     }
     .feature-card {
-    padding: 0px 10px; 
-    margin-left:20px;
+        padding: 0px 10px; 
+        margin-left:20px;
     }
     
     .feature-icon-box {
@@ -142,7 +141,6 @@ st.markdown("""
         font-weight: 500;
         color: #111111;
         margin-bottom: 12px;
-
     }
     .variety-card {
         border-left: 3px solid #1a4380;
@@ -245,32 +243,70 @@ st.markdown("""
         margin-top: 15px;
     }
 
-
+    /* Batch Page Upload Section */
     .upload-dropzone {
-            border: 1px dashed #d0d0d0;
-            border-radius: 4px;
-            padding: 40px 20px;
-            text-align: center;
-            background-color: #fafafa;
-            margin-bottom: 40px;
-        }
-        .upload-title {
-            font-family: serif, 'Times New Roman';
-            font-size: 1.25rem;
-            color: #111111;
-            margin-bottom: 8px;
-        }
-        .upload-subtitle {
-            font-family: serif, 'Times New Roman';
-            font-size: 0.95rem;
-            color: #444444;
-            margin-bottom: 20px;
-        }
-        .preview-header-text {
-            font-family: serif, 'Times New Roman';
-            font-size: 1.15rem;
-            color: #111111;
-        }
+        border: 1px dashed #d0d0d0;
+        border-radius: 4px;
+        padding: 40px 20px;
+        text-align: center;
+        background-color: #fafafa;
+        margin-bottom: 20px;
+    }
+    .upload-title {
+        font-family: serif, 'Times New Roman';
+        font-size: 1.25rem;
+        color: #111111;
+        margin-bottom: 8px;
+    }
+    .upload-subtitle {
+        font-family: serif, 'Times New Roman';
+        font-size: 0.95rem;
+        color: #444444;
+        margin-bottom: 0px;
+    }
+    .preview-header-text {
+        font-family: serif, 'Times New Roman';
+        font-size: 1.15rem;
+        color: #111111;
+    }
+
+    /* Batch Page Table & Badge Styling */
+    .batch-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: serif, 'Times New Roman', Times;
+        margin-top: 10px;
+    }
+    .batch-table th {
+        background-color: #0b2f6b;
+        color: #ffffff;
+        font-weight: 400;
+        text-align: left;
+        padding: 10px 16px;
+        font-size: 0.95rem;
+    }
+    .batch-table td {
+        padding: 12px 16px;
+        font-size: 0.95rem;
+        color: #111111;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .pill-badge {
+        display: inline-block;
+        padding: 2px 14px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-family: serif, 'Times New Roman', Times;
+        text-align: center;
+    }
+    .pill-control {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+    }
+    .pill-stress {
+        background-color: #fbe9e7;
+        color: #d84315;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -301,7 +337,7 @@ with nav_col5:
 
 
 # =============================================================================
-# 4. PAGE ROUTING & CONTENT
+# PAGE ROUTING & CONTENT
 # =============================================================================
 st.markdown("<div style='padding: 0px 60px;'>", unsafe_allow_html=True)
 
@@ -338,7 +374,6 @@ if st.session_state['page'] == 'Home':
                 <div class="feature-desc">Upload a CSV of multiple plants and download an Excel file of all predictions</div>
             </div>
         """, unsafe_allow_html=True)
-       
 
     with c3:
         st.markdown("""
@@ -348,7 +383,6 @@ if st.session_state['page'] == 'Home':
                 <div class="feature-desc">View performance metrics and feature importance for all six trained algorithms</div>
             </div>
         """, unsafe_allow_html=True)
-        
 
 # --- PREDICT PAGE ---
 elif st.session_state['page'] == 'Predict':
@@ -423,7 +457,7 @@ elif st.session_state['page'] == 'Batch':
         </div>
     """, unsafe_allow_html=True)
 
-    # 2. Python Streamlit columns for centered file upload
+    # 2. Centered file upload control
     u_col1, u_col2, u_col3 = st.columns([1, 2, 1])
     with u_col2:
         file_uploaded = st.file_uploader(
@@ -432,19 +466,77 @@ elif st.session_state['page'] == 'Batch':
             label_visibility="visible"
         )
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
 
-    # 3. Bottom Preview Bar & Download Button
+    # 3. Preview Bar Header & Download Button
     prev_col1, prev_col2 = st.columns([3, 1], gap="large")
 
     with prev_col1:
         st.markdown(
-            "<div class='preview-header-text'>Results preview — 0 of 120 plants</div>", 
+            "<div class='preview-header-text' style='line-height: 2.2rem;'>Results preview — 5 of 120 plants</div>", 
             unsafe_allow_html=True
         )
 
     with prev_col2:
         st.button("Download Excel", key="btn_download_excel", use_container_width=True)
+
+    # 4. Replicated HTML Data Table with Styled Pill Badges
+    st.markdown("""
+        <table class="batch-table">
+            <thead>
+                <tr>
+                    <th>Plant</th>
+                    <th>Accession</th>
+                    <th>Treatment</th>
+                    <th>Predicted variety</th>
+                    <th>Final height</th>
+                    <th>Stress group</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>P001</td>
+                    <td>AGRA</td>
+                    <td>Control</td>
+                    <td>AGRA (82%)</td>
+                    <td>38.4 cm</td>
+                    <td><span class="pill-badge pill-control">Control</span></td>
+                </tr>
+                <tr>
+                    <td>P002</td>
+                    <td>ADDO1</td>
+                    <td>Stress</td>
+                    <td>ADDO1 (71%)</td>
+                    <td>22.1 cm</td>
+                    <td><span class="pill-badge pill-stress">Stress</span></td>
+                </tr>
+                <tr>
+                    <td>P003</td>
+                    <td>GBEWAA</td>
+                    <td>Control</td>
+                    <td>GH10887 (54%)</td>
+                    <td>41.2 cm</td>
+                    <td><span class="pill-badge pill-control">Control</span></td>
+                </tr>
+                <tr>
+                    <td>P004</td>
+                    <td>GH1582</td>
+                    <td>Stress</td>
+                    <td>GH1582 (68%)</td>
+                    <td>19.3 cm</td>
+                    <td><span class="pill-badge pill-stress">Stress</span></td>
+                </tr>
+                <tr>
+                    <td>P005</td>
+                    <td>DWARF</td>
+                    <td>Control</td>
+                    <td>DWARF (91%)</td>
+                    <td>29.8 cm</td>
+                    <td><span class="pill-badge pill-control">Control</span></td>
+                </tr>
+            </tbody>
+        </table>
+    """, unsafe_allow_html=True)
 
 # --- DASHBOARD PAGE ---
 elif st.session_state['page'] == 'Dashboard':
