@@ -323,8 +323,8 @@ st.markdown("""
     }
 
     /* Dashboard Page Header Task Buttons */
-    div[data-testid="stHorizontalBlock"]:has(div.dash-task-target) button[kind="primary"],
-    div[data-testid="stHorizontalBlock"] button[key^="btn_task_"]{
+    div[data-testid="stHorizontalBlock"] button[key^="btn_task_"],
+    div[data-testid="stHorizontalBlock"]:has(div.dash-task-target) button[kind="primary"]{
         background-color: transparent !important;
         color: #222222 !important;
         border: none;
@@ -336,8 +336,8 @@ st.markdown("""
         margin-top: 0px !important;
     }
     
-    div[data-testid="stHorizontalBlock"]:has(div.dash-task-target) button[kind="primary"],
-    div[data-testid="stHorizontalBlock"] button[key^="btn_task_"][kind="primary"] {
+    div[data-testid="stHorizontalBlock"] button[key^="btn_task_"][kind="primary"],
+    div[data-testid="stHorizontalBlock"]:has(div.dash-task-target) button[kind="primary"]{
         color: #ffffff !important;
         background-color: #0b2f6b !important;
         font-weight: 500 !important;
