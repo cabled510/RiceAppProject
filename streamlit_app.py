@@ -610,30 +610,30 @@ elif st.session_state['page'] == 'Dashboard':
     # Invisible target div for applying task tab styling
     with t_col1:
         st.button(
-            "Task C — Treatment", 
+            "Task C — treatment", 
             key="btn_task_c", 
             use_container_width=True,
-            type="primary" if st.session_state['dash_task'] == 'Task C — Treatment' else "secondary",
+            type="primary" if st.session_state['dash_task'] == 'Task C — treatment' else "secondary",
             on_click=set_dash_task, 
             args=("Task C — treatment",)
         )
 
     with t_col2:
         st.button(
-            "Task A — Accession", 
+            "Task A — accession", 
             key="btn_task_a", 
             use_container_width=True,
-            type="primary" if st.session_state['dash_task'] == 'Task A — Accession' else "secondary",
+            type="primary" if st.session_state['dash_task'] == 'Task A — accession' else "secondary",
             on_click=set_dash_task, 
             args=("Task A — accession",)
         )
 
     with t_col3:
         st.button(
-            "Task B — Traits", 
+            "Task B — traits", 
             key="btn_task_b", 
             use_container_width=True,
-            type="primary" if st.session_state['dash_task'] == 'Task B — Traits' else "secondary",
+            type="primary" if st.session_state['dash_task'] == 'Task B — traits' else "secondary",
             on_click=set_dash_task, 
             args=("Task B — traits",)
         )
