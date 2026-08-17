@@ -323,10 +323,10 @@ st.markdown("""
     }
 
     /* Dashboard Page Header Task Buttons */
-    div[data-testid="stHorizontalBlock"]:has(div.dash-task-target) button {
+    div[data-testid="stHorizontalBlock"] button[key^="btn_task_"] {
         background-color: transparent !important;
         color: #222222 !important;
-        border: none !important;
+        border: none;
         font-family: serif, 'Times New Roman', Times !important;
         font-size: 1.05rem !important;
         box-shadow: none !important;
@@ -334,7 +334,7 @@ st.markdown("""
         border-radius: 0px !important;
         margin-top: 0px !important;
     }
-    div[data-testid="stHorizontalBlock"]:has(div.dash-task-target) button[kind="primary"] {
+    div[data-testid="stHorizontalBlock"] button[key^="btn_task_"][kind="primary"] {
         color: #ffffff !important;
         background-color: #0b2f6b !important;
         font-weight: 500 !important;
@@ -608,7 +608,6 @@ elif st.session_state['page'] == 'Dashboard':
 
     # Invisible target div for applying task tab styling
     with t_col1:
-        st.markdown("<div class='dash-task-target'></div>", unsafe_allow_html=True)
         st.button(
             "Task C — treatment", 
             key="btn_task_c", 
