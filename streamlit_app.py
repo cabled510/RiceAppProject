@@ -613,7 +613,7 @@ elif st.session_state['page'] == 'Dashboard':
             "Task C — treatment", 
             key="btn_task_c", 
             use_container_width=True,
-            type="primary" if st.session_state['dash_task'] == 'Task C — treatment' else "secondary",
+            type="primary" if st.session_state['dash_task'] == 'Task C — Treatment' else "secondary",
             on_click=set_dash_task, 
             args=("Task C — treatment",)
         )
@@ -623,7 +623,7 @@ elif st.session_state['page'] == 'Dashboard':
             "Task A — accession", 
             key="btn_task_a", 
             use_container_width=True,
-            type="primary" if st.session_state['dash_task'] == 'Task A — accession' else "secondary",
+            type="primary" if st.session_state['dash_task'] == 'Task A — Accession' else "secondary",
             on_click=set_dash_task, 
             args=("Task A — accession",)
         )
@@ -633,7 +633,7 @@ elif st.session_state['page'] == 'Dashboard':
             "Task B — traits", 
             key="btn_task_b", 
             use_container_width=True,
-            type="primary" if st.session_state['dash_task'] == 'Task B — traits' else "secondary",
+            type="primary" if st.session_state['dash_task'] == 'Task B — Traits' else "secondary",
             on_click=set_dash_task, 
             args=("Task B — traits",)
         )
