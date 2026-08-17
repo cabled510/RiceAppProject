@@ -568,7 +568,7 @@ elif st.session_state['page'] == 'Batch':
 # --- DASHBOARD PAGE ---
 elif st.session_state['page'] == 'Dashboard':
     # 1. Top Metrics Summary Row (No numeric values)
-    left_space, m_col1, m_col2, m_col3, m_col4 = st.columns([0.3, 2.25, 2.25, 2.25, 2.25], gap="small")
+    left_space, m_col1, m_col2, m_col3, m_col4 = st.columns([0.1, 2.25, 2.25, 2.25, 2.25], gap="small")
 
     with m_col1:
         st.markdown("""
