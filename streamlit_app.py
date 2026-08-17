@@ -323,7 +323,7 @@ st.markdown("""
     }
 
     /* Dashboard Page Header Task Buttons */
-    div[data-testid="stHorizontalBlock"]:has(div.dash-task-target) button[kind="primary"],,
+    div[data-testid="stHorizontalBlock"]:has(div.dash-task-target) button[kind="primary"],
     div[data-testid="stHorizontalBlock"] button[key^="btn_task_"]{
         background-color: transparent !important;
         color: #222222 !important;
