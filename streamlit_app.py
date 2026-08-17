@@ -244,26 +244,35 @@ st.markdown("""
     }
 
     /* Batch Page Upload Section */
-    .upload-dropzone {
-        border: 1px dashed #d0d0d0;
-        border-radius: 4px;
-        padding: 40px 20px;
+    .upload-container {
         text-align: center;
-        background-color: #fafafa;
-        margin-bottom: 20px;
+        margin: 20px auto 30px auto;
+        max-width: 800px;
     }
     .upload-title {
         font-family: serif, 'Times New Roman';
         font-size: 1.25rem;
         color: #111111;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
     .upload-subtitle {
         font-family: serif, 'Times New Roman';
         font-size: 0.95rem;
-        color: #444444;
-        margin-bottom: 0px;
+        color: #333333;
+        margin-bottom: 16px;
     }
+    
+    /* Center align Streamlit File Uploader widget */
+    div[data-testid="stFileUploader"] {
+        width: 100% !important;
+        max-width: 420px !important;
+        margin: 0 auto !important;
+    }
+    div[data-testid="stFileUploader"] section {
+        padding: 8px 12px !important;
+        justify-content: center !important;
+    }
+
     .preview-header-text {
         font-family: serif, 'Times New Roman';
         font-size: 1.15rem;
@@ -449,24 +458,22 @@ elif st.session_state['page'] == 'Predict':
 
 # --- BATCH PAGE ---
 elif st.session_state['page'] == 'Batch':
-    # 1. Custom HTML header banner
+    # 1. Centered Header Text Section
     st.markdown("""
-        <div class="upload-dropzone">
+        <div class="upload-container">
             <div class="upload-title">Drop your CSV or Excel file here</div>
             <div class="upload-subtitle">Required columns: Accession, Treatment, Base_Height, H_Feb04, H_Feb14, Alive_Feb14</div>
         </div>
     """, unsafe_allow_html=True)
 
-    # 2. Centered file upload control
-    u_col1, u_col2, u_col3 = st.columns([1, 2, 1])
-    with u_col2:
-        file_uploaded = st.file_uploader(
-            "Browse file or download template ↓", 
-            type=["csv", "xlsx"], 
-            label_visibility="visible"
-        )
+    # 2. Centered File Uploader Control
+    file_uploaded = st.file_uploader(
+        "Browse file or download template ↓", 
+        type=["csv", "xlsx"], 
+        label_visibility="visible"
+    )
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<br><br>", unsafe_allow_html=True)
 
     # 3. Preview Bar Header & Download Button
     prev_col1, prev_col2 = st.columns([3, 1], gap="large")
