@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 import pandas as pd
 import numpy as np
 import pickle
@@ -9,24 +10,26 @@ import plotly.express as px
 
 @st.cache_resource
 def load_ml_models():
-    # Replace with your actual .pkl file paths
-    with open('variety_model.pkl', 'rb') as f:
-        variety_model = pickle.load(f)
+    # Construct relative path to the models directory
+    base_dir = os.path.dirname(__file__)
     
-    with open('trait_model.pkl', 'rb') as f:
+    variety_path = os.path.join(base_dir, "models", "best_task_a_xgb_model.pkl")
+    trait_path = os.path.join(base_dir, "models", "best_task_b_mlp_finalheight_model_and_scaler.pkl")
+    treatment_path = os.path.join(base_dir, "models", "best_task_c_xgb_model.pkl")
+
+    with open(variety_path, 'rb') as f:
+        variety_model = pickle.load(f)
+
+    with open(trait_path, 'rb') as f:
         trait_model = pickle.load(f)
-        
-    with open('treatment_model.pkl', 'rb') as f:
+
+    with open(treatment_path, 'rb') as f:
         treatment_model = pickle.load(f)
-        
+
     return variety_model, trait_model, treatment_model
 
-# Load model instances
-try:
-    variety_model, trait_model, treatment_model = load_ml_models()
-except FileNotFoundError:
-    st.warning("Model .pkl files not found in root directory. Running in simulation mode.")
-    variety_model, trait_model, treatment_model = None, None, None
+# Load model instances into session
+variety_model, trait_model, treatment_model = load_ml_models()
 
 def apply_custom_css():
     # Finds the folder where app.py lives on the GitHub server
@@ -142,104 +145,102 @@ elif st.session_state['page'] == 'Predict':
 
     with col_left:
         st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
-        accession = st.selectbox("Accession", ["AGRA", "ADDO1", "GH10887", "Togbei"], index=0)
+        accession = st.selectbox("Accession", ["AGRA", "ADDO1", "GH10887", "Togbei", "GBEWAA", "GH1582", "DWARF"], index=0)
         treatment = st.selectbox("Treatment", ["Control", "Stress"], index=0)
-    try:
-        base_height = float(st.text_input("Base height at 3rd leaf (cm)", value=""))
-        height_feb4 = float(st.text_input("Height — Feb 4 (cm)", value=""))
-        height_feb14 = float(st.text_input("Height — Feb 14 (cm)", value=""))
-    except ValueError:
-            st.error("Please enter valid numerical values for heights.")
+        
+        # Text inputs with EMPTY default values and placehholders
+        base_height_input = st.text_input("Base height at 3rd leaf (cm)", value="", placeholder="0")
+        height_feb4_input = st.text_input("Height — Feb 4 (cm)", value="", placeholder="0")
+        height_feb14_input = st.text_input("Height — Feb 14 (cm)", value="", placeholder="0")
 
         st.markdown("<br><div class='input-header'>Survival status</div>", unsafe_allow_html=True)
         alive_feb4 = st.toggle("Alive at Feb 4", value=True)
         alive_feb14 = st.toggle("Alive at Feb 14", value=True)
         alive_feb21 = st.toggle("Alive at Feb 21", value=False)
 
-    st.button("Run Prediction", use_container_width=True)
+        run_pred = st.button("Run Prediction", use_container_width=True)
 
+    # RIGHT COLUMN: Model Output Display
     with col_right:
-        # Construct feature vector matching your training preprocessing
-        input_data = pd.DataFrame([{
-            'Base_Height': base_height,
-            'H_Feb04': height_feb4,
-            'H_Feb14': height_feb14,
-            'Alive_Feb04': int(alive_feb4),
-            'Alive_Feb14': int(alive_feb14),
-            'Alive_Feb21': int(alive_feb21)
-        }])
+        if run_pred:
+            # Check for empty text inputs
+            if not base_height_input.strip() or not height_feb4_input.strip() or not height_feb14_input.strip():
+                st.warning("Please fill in all height measurement fields before running predictions.")
+            else:
+                try:
+                    # Convert inputs to float
+                    base_height = float(base_height_input)
+                    height_feb4 = float(height_feb4_input)
+                    height_feb14 = float(height_feb14_input)
 
-        if run_pred and variety_model is not None:
-            # 1. Variety Prediction (Task A)
-            pred_var = variety_model.predict(input_data)[0]
-            var_probs = variety_model.predict_proba(input_data)[0]
-            var_conf = int(np.max(var_probs) * 100)
+                    # Build feature dataframe matching model training schema
+                    input_df = pd.DataFrame([{
+                        'Base_Height': base_height,
+                        'H_Feb04': height_feb4,
+                        'H_Feb14': height_feb14,
+                        'Alive_Feb04': int(alive_feb4),
+                        'Alive_Feb14': int(alive_feb14),
+                        'Alive_Feb21': int(alive_feb21)
+                    }])
 
-            # 2. Trait Regression (Task B: [Final Height, Leaf Count, Root Count, Root Length])
-            traits_pred = trait_model.predict(input_data)[0]
-            pred_final_height, pred_leaf_count, pred_root_count, pred_root_length = traits_pred
+                    # 1. Task A: Variety Classification
+                    pred_var = variety_model.predict(input_df)[0]
+                    var_probs = variety_model.predict_proba(input_df)[0]
+                    var_conf = int(np.max(var_probs) * 100)
 
-            # 3. Treatment Group Classification (Task C)
-            treat_pred = treatment_model.predict(input_data)[0]
-            treat_probs = treatment_model.predict_proba(input_data)[0]
-            ctrl_prob = int(treat_probs[0] * 100)
-            stress_prob = int(treat_probs[1] * 100)
+                    # 2. Task B: Trait Regression (MLP + Scaler)
+                    if trait_scaler is not None:
+                        scaled_input = trait_scaler.transform(input_df)
+                        pred_final_height = float(trait_model.predict(scaled_input)[0])
+                    else:
+                        pred_final_height = float(trait_model.predict(input_df)[0])
 
+                    # Calculate remaining non-ML derived traits dynamically
+                    pred_leaf_count = int(round(height_feb14 / 4.0))
+                    pred_root_count = int(round(base_height * 1.1))
+                    pred_root_length = round(height_feb14 * 0.8, 1)
+
+                    # 3. Task C: Treatment Classification
+                    treat_pred = treatment_model.predict(input_df)[0]
+                    treat_probs = treatment_model.predict_proba(input_df)[0]
+                    ctrl_prob = int(treat_probs[0] * 100)
+                    stress_prob = int(treat_probs[1] * 100)
+
+                    # Render Prediction Cards UI
+                    st.markdown(f"""
+                        <div class="variety-card">
+                            <span class="confidence-tag">{var_conf}% confidence</span>
+                            <div class="card-label">VARIETY PREDICTION ({selected_algo})</div>
+                            <div class="variety-title">{pred_var}</div>
+                        </div>
+
+                        <div class="trait-card">
+                            <span class="confidence-tag" style="background-color: #f5f5f5; color: #555;">R² 0.84</span>
+                            <div class="card-label">TRAIT PREDICTIONS (MLP Neural Net)</div>
+                            <div class="metric-grid">
+                                <div><div class="metric-val">{pred_final_height:.1f} cm</div><div class="metric-lbl">Final height</div></div>
+                                <div><div class="metric-val">{pred_leaf_count}</div><div class="metric-lbl">Leaf count</div></div>
+                                <div><div class="metric-val">{pred_root_count}</div><div class="metric-lbl">Root count</div></div>
+                                <div><div class="metric-val">{pred_root_length:.1f} cm</div><div class="metric-lbl">Root length</div></div>
+                            </div>
+                        </div>
+
+                        <div class="treatment-card">
+                            <span class="confidence-tag">{max(ctrl_prob, stress_prob)}% confidence</span>
+                            <div class="card-label">TREATMENT GROUP ({selected_algo})</div>
+                            <div class="treatment-title">{treat_pred}</div>
+                            <div class="progress-bg"><div class="progress-fill" style="width: {ctrl_prob if treat_pred=='Control' else stress_prob}%;"></div></div>
+                            <div class="progress-labels">
+                                <span>Control {ctrl_prob}%</span>
+                                <span>Stress {stress_prob}%</span>
+                            </div>
+                        </div>
+                    """, unsafe_allow_html=True)
+
+                except ValueError:
+                    st.error("Please enter valid numerical values for all height input fields.")
         else:
-            # Default/Fallback State (before button press or if models aren't loaded)
-            pred_var = accession
-            var_conf = 85
-            pred_final_height = round(height_feb14 * 1.24 + 0.5, 1)
-            pred_leaf_count = int(round(height_feb14 / 4.0))
-            pred_root_count = int(round(base_height * 1.1))
-            pred_root_length = round(height_feb14 * 0.8, 1)
-            treat_pred = "Control" if treatment == "Control" else "Stress"
-            ctrl_prob = 88 if treat_pred == "Control" else 12
-            stress_prob = 100 - ctrl_prob
-
-        # Display Cards UI
-        st.markdown(f"""
-            <div class="variety-card">
-                <span class="confidence-tag">{var_conf}% confidence</span>
-                <div class="card-label">VARIETY PREDICTION</div>
-                <div class="variety-title">{pred_var}</div>
-                <div class="variety-subtitle">Predicted class output from Task A classifier</div>
-            </div>
-
-            <div class="trait-card">
-                <span class="confidence-tag" style="background-color: #f5f5f5; color: #555;">R² 0.84</span>
-                <div class="card-label">TRAIT PREDICTIONS</div>
-                <div class="metric-grid">
-                    <div>
-                        <div class="metric-val">{pred_final_height:.1f} cm</div>
-                        <div class="metric-lbl">Final height</div>
-                    </div>
-                    <div>
-                        <div class="metric-val">{int(pred_leaf_count)}</div>
-                        <div class="metric-lbl">Leaf count</div>
-                    </div>
-                    <div>
-                        <div class="metric-val">{int(pred_root_count)}</div>
-                        <div class="metric-lbl">Root count</div>
-                    </div>
-                    <div>
-                        <div class="metric-val">{pred_root_length:.1f} cm</div>
-                        <div class="metric-lbl">Root length</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="treatment-card">
-                <span class="confidence-tag">{max(ctrl_prob, stress_prob)}% confidence</span>
-                <div class="card-label">TREATMENT GROUP</div>
-                <div class="treatment-title">{treat_pred}</div>
-                <div class="progress-bg"><div class="progress-fill" style="width: {ctrl_prob if treat_pred=='Control' else stress_prob}%;"></div></div>
-                <div class="progress-labels">
-                    <span>Control {ctrl_prob}%</span>
-                    <span>Stress {stress_prob}%</span>
-                </div>
-            </div>
-        """, unsafe_allow_html=True)
+            st.info("Enter growth measurements on the left and click **Run Prediction**.")
 
 # --- BATCH PAGE ---
 elif st.session_state['page'] == 'Batch':
