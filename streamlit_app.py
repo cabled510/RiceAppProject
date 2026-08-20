@@ -136,8 +136,8 @@ elif st.session_state['page'] == 'Predict':
             <div class="variety-card">
                 <span class="confidence-tag">78% confidence</span>
                 <div class="card-label">VARIETY PREDICTION</div>
-                <div class="variety-title">ADDO1</div>
-                <div class="variety-subtitle">Also likely: AGRA (12%) · GH10887 (6%)</div>
+                <div class="variety-title">-</div>
+                <div class="variety-subtitle">Also likely:</div>
             </div>
 
             <div class="trait-card">
@@ -145,19 +145,19 @@ elif st.session_state['page'] == 'Predict':
                 <div class="card-label">TRAIT PREDICTIONS</div>
                 <div class="metric-grid">
                     <div>
-                        <div class="metric-val">34.2 cm</div>
+                        <div class="metric-val"></div>
                         <div class="metric-lbl">Final height</div>
                     </div>
                     <div>
-                        <div class="metric-val">7</div>
+                        <div class="metric-val">-</div>
                         <div class="metric-lbl">Leaf count</div>
                     </div>
                     <div>
-                        <div class="metric-val">14</div>
+                        <div class="metric-val">-</div>
                         <div class="metric-lbl">Root count</div>
                     </div>
                     <div>
-                        <div class="metric-val">22.1 cm</div>
+                        <div class="metric-val">-</div>
                         <div class="metric-lbl">Root length</div>
                     </div>
                 </div>
@@ -169,8 +169,8 @@ elif st.session_state['page'] == 'Predict':
                 <div class="treatment-title">Control</div>
                 <div class="progress-bg"><div class="progress-fill"></div></div>
                 <div class="progress-labels">
-                    <span>Control 97%</span>
-                    <span>Stress 3%</span>
+                    <span>Control-</span>
+                    <span>Stress-</span>
                 </div>
             </div>
         """, unsafe_allow_html=True)
