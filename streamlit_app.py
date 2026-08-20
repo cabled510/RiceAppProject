@@ -1,15 +1,21 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from pathlib import Path
 import plotly.express as px
 
-def local_css(styles.css):
+def apply_custom_css():
+    # Finds the folder where app.py lives on the GitHub server
+    current_dir = Path(__file__).parent
+    css_path = current_dir / "styles.css"
+    
     try:
-        with open(styles.css, "r") as f:
-            # st.html securely injects the css wrapper into the app
+        with open(css_path, "r") as f:
             st.html(f"<style>{f.read()}</style>")
     except FileNotFoundError:
-        st.error(f"Could not find the style file at: {styles.css}")
+        st.error(f"Could not find {css_path} on the server.")
+
+apply_custom_css()
 
 st.set_page_config(
     page_title="GhanaRice ML",
