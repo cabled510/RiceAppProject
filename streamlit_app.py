@@ -152,7 +152,7 @@ elif st.session_state['page'] == 'Predict':
         base_height_input = st.text_input("Base height at 3rd leaf (cm)", value="", placeholder="0")
         height_feb4_input = st.text_input("Height — Feb 4 (cm)", value="", placeholder="0")
         height_feb14_input = st.text_input("Height — Feb 14 (cm)", value="", placeholder="0")
-
+        
         st.markdown("<br><div class='input-header'>Survival status</div>", unsafe_allow_html=True)
         alive_feb4 = st.toggle("Alive at Feb 4", value=True)
         alive_feb14 = st.toggle("Alive at Feb 14", value=True)
