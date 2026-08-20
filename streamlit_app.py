@@ -3,6 +3,13 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 
+def local_css(styles.css):
+    try:
+        with open(styles.css, "r") as f:
+            # st.html securely injects the css wrapper into the app
+            st.html(f"<style>{f.read()}</style>")
+    except FileNotFoundError:
+        st.error(f"Could not find the style file at: {styles.css}")
 
 st.set_page_config(
     page_title="GhanaRice ML",
