@@ -10,26 +10,46 @@ import plotly.express as px
 
 @st.cache_resource
 def load_ml_models():
+    """
+    Loads machine learning models from the local 'models/' directory.
+    Uses @st.cache_resource so models load into memory only once.
+    """
     # Construct relative path to the models directory
-    base_dir = os.path.dirname(__file__)
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     
     variety_path = os.path.join(base_dir, "models", "best_task_a_xgb_model.pkl")
     trait_path = os.path.join(base_dir, "models", "best_task_b_mlp_finalheight_model_and_scaler.pkl")
     treatment_path = os.path.join(base_dir, "models", "best_task_c_xgb_model.pkl")
 
-    with open(variety_path, 'rb') as f:
-        variety_model = pickle.load(f)
+    try:
+        # Load Task A: Variety Classification (XGBoost)
+        with open(variety_path, 'rb') as f:
+            variety_model = pickle.load(f)
 
-    with open(trait_path, 'rb') as f:
-        trait_model = pickle.load(f)
+        # Load Task B: Final Height Trait Prediction (MLP + Scaler Bundle)
+        with open(trait_path, 'rb') as f:
+            trait_data = pickle.load(f)
+            # Unpack model and scaler if saved as a tuple or dictionary
+            if isinstance(trait_data, tuple):
+                trait_model, trait_scaler = trait_data[0], trait_data[1]
+            elif isinstance(trait_data, dict):
+                trait_model = trait_data.get('model')
+                trait_scaler = trait_data.get('scaler')
+            else:
+                trait_model, trait_scaler = trait_data, None
 
-    with open(treatment_path, 'rb') as f:
-        treatment_model = pickle.load(f)
+        # Load Task C: Stress/Treatment Detection (XGBoost)
+        with open(treatment_path, 'rb') as f:
+            treatment_model = pickle.load(f)
 
-    return variety_model, trait_model, treatment_model
+        return variety_model, trait_model, trait_scaler, treatment_model
 
-# Load model instances into session
-variety_model, trait_model, treatment_model = load_ml_models()
+    except FileNotFoundError as e:
+        st.error(f"⚠️ Model file missing: {e}. Please ensure model files are placed in the 'models/' folder.")
+        return None, None, None, None
+    except Exception as e:
+        st.error(f"⚠️ Error loading models: {e}")
+        return None, None, None, None
 
 def apply_custom_css():
     # Finds the folder where app.py lives on the GitHub server
