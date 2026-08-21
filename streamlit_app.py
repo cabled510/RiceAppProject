@@ -13,9 +13,9 @@ def load_ml_models():
     # Construct relative path to the models directory
     base_dir = os.path.dirname(__file__)
     
-    variety_path = os.path.join(.streamlit, "models", "best_task_a_xgb_model.pkl")
-    trait_path = os.path.join(.streamlit, "models", "best_task_b_mlp_finalheight_model_and_scaler.pkl")
-    treatment_path = os.path.join(.streamlit, "models", "best_task_c_xgb_model.pkl")
+    variety_path = os.path.join(base_dir, .streamlit, "models", "best_task_a_xgb_model.pkl")
+    trait_path = os.path.join(base_dir, .streamlit, "models", "best_task_b_mlp_finalheight_model_and_scaler.pkl")
+    treatment_path = os.path.join(base_dir, .streamlit, "models", "best_task_c_xgb_model.pkl")
 
     with open(variety_path, 'rb') as f:
         variety_model = pickle.load(f)
