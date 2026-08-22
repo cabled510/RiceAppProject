@@ -7,34 +7,46 @@ import joblib
 from pathlib import Path
 import plotly.express as px
 
+# Accession & Treatment Encoding Mappings
+ACC_MAP = {
+    0: 'ADDO1', 1: 'ADDO2', 2: 'AGRA', 3: 'DWARF', 4: 'GBEWAA', 5: 'GH10887',
+    6: 'GH10942', 7: 'GH10950', 8: 'GH11036', 9: 'GH11610', 10: 'GH1528',
+    11: 'GH1546', 12: 'GH1570', 13: 'GH1582', 14: 'GH1589', 15: 'GH1827',
+    16: 'GH2075', 17: 'GH2123'
+}
+REV_ACC_MAP = {v: k for k, v in ACC_MAP.items()}
+
 
 @st.cache_resource
 def load_ml_models():
     """
-    Loads machine learning models from the local 'models/' directory.
+    Loads machine learning models from the local directory or models/ folder.
     Uses @st.cache_resource so models load into memory only once.
     """
-    # Construct relative path to the models directory
     base_dir = os.path.dirname(os.path.abspath(__file__))
     
-    variety_path = os.path.join(base_dir, "models", "best_task_a_xgb_model.pkl")
-    trait_path = os.path.join(base_dir, "models", "best_task_b_mlp_finalheight_model_and_scaler.pkl")
-    treatment_path = os.path.join(base_dir, "models", "best_task_c_xgb_model.pkl")
+    def get_path(filename):
+        root_path = os.path.join(base_dir, filename)
+        sub_path = os.path.join(base_dir, "models", filename)
+        return root_path if os.path.exists(root_path) else sub_path
+
+    variety_path = get_path("best_task_a_xgb_model.pkl")
+    trait_path = get_path("best_task_b_mlp_finalheight_model_and_scaler.pkl")
+    treatment_path = get_path("best_task_c_xgb_model.pkl")
 
     try:
         # Load Task A: Variety Classification (XGBoost)
         with open(variety_path, 'rb') as f:
             variety_model = pickle.load(f)
 
-        # Load Task B: Final Height Trait Prediction (MLP + Scaler Bundle)
+        # Load Task B: Final Height Trait Prediction (MinMaxScaler + MLPRegressor)
         with open(trait_path, 'rb') as f:
             trait_data = pickle.load(f)
-            # Unpack model and scaler if saved as a tuple or dictionary
             if isinstance(trait_data, tuple):
-                trait_model, trait_scaler = trait_data[0], trait_data[1]
+                trait_scaler, trait_model = trait_data[0], trait_data[1]
             elif isinstance(trait_data, dict):
-                trait_model = trait_data.get('model')
                 trait_scaler = trait_data.get('scaler')
+                trait_model = trait_data.get('model')
             else:
                 trait_model, trait_scaler = trait_data, None
 
@@ -45,14 +57,112 @@ def load_ml_models():
         return variety_model, trait_model, trait_scaler, treatment_model
 
     except FileNotFoundError as e:
-        st.error(f"⚠️ Model file missing: {e}. Please ensure model files are placed in the 'models/' folder.")
+        st.error(f"⚠️ Model file missing: {e}. Please ensure model files are placed in the repository root or 'models/' folder.")
         return None, None, None, None
     except Exception as e:
         st.error(f"⚠️ Error loading models: {e}")
         return None, None, None, None
 
+# Load models once at app startup
+variety_model, trait_model, trait_scaler, treatment_model = load_ml_models()
+
+
+def build_model_inputs(accession_str, treatment_str, base_height, h_feb04, h_feb14, alive_feb04=1, alive_feb14=1, alive_feb21=0):
+    acc_label = REV_ACC_MAP.get(accession_str, 0)
+    treat_enc = 1 if treatment_str == 'Stress' else 0
+    
+    growth_feb04 = h_feb04 - base_height
+    growth_feb14 = h_feb14 - h_feb04
+    rate_base_feb04 = growth_feb04 / 4.0 if 4.0 != 0 else 0.0
+    rate_feb04_feb14 = growth_feb14 / 10.0 if 10.0 != 0 else 0.0
+    
+    growth_feb21 = growth_feb14 * 0.7
+    h_feb21 = h_feb14 + growth_feb21
+    growth_feb28 = growth_feb14 * 0.5
+    h_feb28 = h_feb21 + growth_feb28
+    
+    rate_feb14_feb21 = growth_feb21 / 7.0
+    rate_feb21_feb28 = growth_feb28 / 7.0
+    total_growth = h_feb28 - base_height
+    growth_accel = rate_feb04_feb14 - rate_base_feb04
+    
+    alive_feb28 = alive_feb21
+    survival_score = (alive_feb14 + alive_feb21 + alive_feb28) / 3.0
+    
+    leaf_number = max(1, int(round(h_feb14 / 4.0)))
+    root_number = max(1, int(round(base_height * 1.1)))
+    root_length = round(h_feb14 * 0.8, 1)
+    
+    # Task A Features
+    df_task_a = pd.DataFrame([{
+        'Base_Height': base_height,
+        'H_Feb04': h_feb04,
+        'H_Feb14': h_feb14,
+        'H_Feb21': h_feb21,
+        'H_Feb28': h_feb28,
+        'Growth_Feb04': growth_feb04,
+        'Growth_Feb14': growth_feb14,
+        'Growth_Feb21': growth_feb21,
+        'Growth_Feb28': growth_feb28,
+        'Rate_Feb04_Feb14': rate_feb04_feb14,
+        'Rate_Feb14_Feb21': rate_feb14_feb21,
+        'Rate_Feb21_Feb28': rate_feb21_feb28,
+        'Total_Growth': total_growth,
+        'Growth_Acceleration': growth_accel,
+        'Survival_Score': survival_score,
+        'Treatment_Encoded': treat_enc,
+        'Alive_Feb14': alive_feb14,
+        'Alive_Feb21': alive_feb21,
+        'Alive_Feb28': alive_feb28
+    }])
+    if variety_model and hasattr(variety_model, 'feature_names_in_'):
+        df_task_a = df_task_a[variety_model.feature_names_in_]
+        
+    # Task B Features
+    df_task_b = pd.DataFrame([{
+        'Base_Height': base_height,
+        'H_Feb04': h_feb04,
+        'H_Feb14': h_feb14,
+        'Growth_Feb04': growth_feb04,
+        'Growth_Feb14': growth_feb14,
+        'Rate_Base_Feb04': rate_base_feb04,
+        'Rate_Feb04_Feb14': rate_feb04_feb14,
+        'Accession_Label': acc_label,
+        'Treatment_Encoded': treat_enc,
+        'Alive_Feb14': alive_feb14
+    }])
+    if trait_scaler and hasattr(trait_scaler, 'feature_names_in_'):
+        df_task_b = df_task_b[trait_scaler.feature_names_in_]
+        
+    # Task C Features
+    df_task_c = pd.DataFrame([{
+        'Base_Height': base_height,
+        'H_Feb04': h_feb04,
+        'H_Feb14': h_feb14,
+        'H_Feb21': h_feb21,
+        'H_Feb28': h_feb28,
+        'Growth_Feb04': growth_feb04,
+        'Growth_Feb14': growth_feb14,
+        'Growth_Feb21': growth_feb21,
+        'Growth_Feb28': growth_feb28,
+        'Total_Growth': total_growth,
+        'Growth_Acceleration': growth_accel,
+        'Survival_Score': survival_score,
+        'Alive_Feb14': alive_feb14,
+        'Alive_Feb21': alive_feb21,
+        'Alive_Feb28': alive_feb28,
+        'Leaf_Number': leaf_number,
+        'Root_Number': root_number,
+        'Root_Length': root_length,
+        'Accession_Label': acc_label
+    }])
+    if treatment_model and hasattr(treatment_model, 'feature_names_in_'):
+        df_task_c = df_task_c[treatment_model.feature_names_in_]
+        
+    return df_task_a, df_task_b, df_task_c, leaf_number, root_number, root_length
+
+
 def apply_custom_css():
-    # Finds the folder where app.py lives on the GitHub server
     current_dir = Path(__file__).parent
     css_path = current_dir / "styles.css"
     
@@ -71,12 +181,37 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Initialize Session State Page Navigation & Dashboard Task Tab
+# Initialize Session State Page Navigation, Dashboard Task Tab & Prediction History
 if 'page' not in st.session_state:
     st.session_state['page'] = 'Home'
 
 if 'dash_task' not in st.session_state:
     st.session_state['dash_task'] = 'Task C — treatment'
+
+if 'last_prediction' not in st.session_state:
+    st.session_state['last_prediction'] = None
+
+if 'prediction_history' not in st.session_state:
+    st.session_state['prediction_history'] = []
+
+# Persistent Input Session States
+if 'pred_accession' not in st.session_state:
+    st.session_state['pred_accession'] = 'ADDO1'
+if 'pred_treatment' not in st.session_state:
+    st.session_state['pred_treatment'] = 'Control'
+if 'pred_base_height' not in st.session_state:
+    st.session_state['pred_base_height'] = ''
+if 'pred_h_feb04' not in st.session_state:
+    st.session_state['pred_h_feb04'] = ''
+if 'pred_h_feb14' not in st.session_state:
+    st.session_state['pred_h_feb14'] = ''
+if 'pred_alive_feb4' not in st.session_state:
+    st.session_state['pred_alive_feb4'] = True
+if 'pred_alive_feb14' not in st.session_state:
+    st.session_state['pred_alive_feb14'] = True
+if 'pred_alive_feb21' not in st.session_state:
+    st.session_state['pred_alive_feb21'] = False
+
 
 def set_page(page_name):
     st.session_state['page'] = page_name
@@ -135,7 +270,9 @@ if st.session_state['page'] == 'Home':
     with c1:
         st.markdown("""
             <div class="feature-card">
-                <div class="feature-icon-box"></div>
+                <div class="feature-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0b2f6b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                </div>
                 <div class="feature-title">Single prediction</div>
                 <div class="feature-desc">Enter one plant's measurements and get variety, trait, and stress predictions instantly</div>
             </div>
@@ -144,7 +281,9 @@ if st.session_state['page'] == 'Home':
     with c2:
         st.markdown("""
             <div class="feature-card">
-                <div class="feature-icon-box"></div>
+                <div class="feature-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0b2f6b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
                 <div class="feature-title">Batch upload</div>
                 <div class="feature-desc">Upload a CSV of multiple plants and download an Excel file of all predictions</div>
             </div>
@@ -153,7 +292,9 @@ if st.session_state['page'] == 'Home':
     with c3:
         st.markdown("""
             <div class="feature-card">
-                <div class="feature-icon-box"></div>
+                <div class="feature-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0b2f6b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                </div>
                 <div class="feature-title">Model dashboard</div>
                 <div class="feature-desc">View performance metrics and feature importance for all six trained algorithms</div>
             </div>
@@ -165,102 +306,125 @@ elif st.session_state['page'] == 'Predict':
 
     with col_left:
         st.markdown("<div class='input-header'>Growth measurements</div>", unsafe_allow_html=True)
-        accession = st.selectbox("Accession", ["AGRA", "ADDO1", "GH10887", "Togbei", "GBEWAA", "GH1582", "DWARF"], index=0)
-        treatment = st.selectbox("Treatment", ["Control", "Stress"], index=0)
+        accession_options = list(REV_ACC_MAP.keys())
+        accession = st.selectbox("Accession", accession_options, key="pred_accession")
+        treatment = st.selectbox("Treatment", ["Control", "Stress"], key="pred_treatment")
         
-        # Text inputs with EMPTY default values and placehholders
-        base_height_input = st.text_input("Base height at 3rd leaf (cm)", value="", placeholder="0")
-        height_feb4_input = st.text_input("Height — Feb 4 (cm)", value="", placeholder="0")
-        height_feb14_input = st.text_input("Height — Feb 14 (cm)", value="", placeholder="0")
+        base_height_input = st.text_input("Base height at 3rd leaf (cm)", key="pred_base_height", placeholder="e.g. 15.0")
+        height_feb4_input = st.text_input("Height — Feb 4 (cm)", key="pred_h_feb04", placeholder="e.g. 22.5")
+        height_feb14_input = st.text_input("Height — Feb 14 (cm)", key="pred_h_feb14", placeholder="e.g. 32.0")
         
         st.markdown("<br><div class='input-header'>Survival status</div>", unsafe_allow_html=True)
-        alive_feb4 = st.toggle("Alive at Feb 4", value=True)
-        alive_feb14 = st.toggle("Alive at Feb 14", value=True)
-        alive_feb21 = st.toggle("Alive at Feb 21", value=False)
+        alive_feb4 = st.toggle("Alive at Feb 4", key="pred_alive_feb4")
+        alive_feb14 = st.toggle("Alive at Feb 14", key="pred_alive_feb14")
+        alive_feb21 = st.toggle("Alive at Feb 21", key="pred_alive_feb21")
 
         run_pred = st.button("Run Prediction", use_container_width=True)
 
     # RIGHT COLUMN: Model Output Display
     with col_right:
         if run_pred:
-            # Check for empty text inputs
             if not base_height_input.strip() or not height_feb4_input.strip() or not height_feb14_input.strip():
                 st.warning("Please fill in all height measurement fields before running predictions.")
+            elif variety_model is None or trait_model is None or treatment_model is None:
+                st.error("Model loading error. Please ensure model files exist.")
             else:
                 try:
-                    # Convert inputs to float
                     base_height = float(base_height_input)
                     height_feb4 = float(height_feb4_input)
                     height_feb14 = float(height_feb14_input)
 
-                    # Build feature dataframe matching model training schema
-                    input_df = pd.DataFrame([{
-                        'Base_Height': base_height,
-                        'H_Feb04': height_feb4,
-                        'H_Feb14': height_feb14,
-                        'Alive_Feb04': int(alive_feb4),
-                        'Alive_Feb14': int(alive_feb14),
-                        'Alive_Feb21': int(alive_feb21)
-                    }])
+                    df_a, df_b, df_c, pred_leaf_count, pred_root_count, pred_root_length = build_model_inputs(
+                        accession, treatment, base_height, height_feb4, height_feb14,
+                        int(alive_feb4), int(alive_feb14), int(alive_feb21)
+                    )
 
                     # 1. Task A: Variety Classification
-                    pred_var = variety_model.predict(input_df)[0]
-                    var_probs = variety_model.predict_proba(input_df)[0]
+                    pred_var_idx = variety_model.predict(df_a)[0]
+                    var_probs = variety_model.predict_proba(df_a)[0]
+                    pred_var = ACC_MAP.get(pred_var_idx, f"Variety_{pred_var_idx}")
                     var_conf = int(np.max(var_probs) * 100)
 
                     # 2. Task B: Trait Regression (MLP + Scaler)
                     if trait_scaler is not None:
-                        scaled_input = trait_scaler.transform(input_df)
-                        pred_final_height = float(trait_model.predict(scaled_input)[0])
+                        scaled_b = trait_scaler.transform(df_b)
+                        pred_final_height = float(trait_model.predict(scaled_b)[0])
                     else:
-                        pred_final_height = float(trait_model.predict(input_df)[0])
-
-                    # Calculate remaining non-ML derived traits dynamically
-                    pred_leaf_count = int(round(height_feb14 / 4.0))
-                    pred_root_count = int(round(base_height * 1.1))
-                    pred_root_length = round(height_feb14 * 0.8, 1)
+                        pred_final_height = float(trait_model.predict(df_b)[0])
 
                     # 3. Task C: Treatment Classification
-                    treat_pred = treatment_model.predict(input_df)[0]
-                    treat_probs = treatment_model.predict_proba(input_df)[0]
+                    treat_pred_idx = treatment_model.predict(df_c)[0]
+                    treat_probs = treatment_model.predict_proba(df_c)[0]
+                    treat_pred = "Control" if treat_pred_idx == 0 else "Stress"
                     ctrl_prob = int(treat_probs[0] * 100)
                     stress_prob = int(treat_probs[1] * 100)
 
-                    # Render Prediction Cards UI
-                    st.markdown(f"""
-                        <div class="variety-card">
-                            <span class="confidence-tag">{var_conf}% confidence</span>
-                            <div class="card-label">VARIETY PREDICTION ({selected_algo})</div>
-                            <div class="variety-title">{pred_var}</div>
-                        </div>
-
-                        <div class="trait-card">
-                            <span class="confidence-tag" style="background-color: #f5f5f5; color: #555;">R² 0.84</span>
-                            <div class="card-label">TRAIT PREDICTIONS (MLP Neural Net)</div>
-                            <div class="metric-grid">
-                                <div><div class="metric-val">{pred_final_height:.1f} cm</div><div class="metric-lbl">Final height</div></div>
-                                <div><div class="metric-val">{pred_leaf_count}</div><div class="metric-lbl">Leaf count</div></div>
-                                <div><div class="metric-val">{pred_root_count}</div><div class="metric-lbl">Root count</div></div>
-                                <div><div class="metric-val">{pred_root_length:.1f} cm</div><div class="metric-lbl">Root length</div></div>
-                            </div>
-                        </div>
-
-                        <div class="treatment-card">
-                            <span class="confidence-tag">{max(ctrl_prob, stress_prob)}% confidence</span>
-                            <div class="card-label">TREATMENT GROUP ({selected_algo})</div>
-                            <div class="treatment-title">{treat_pred}</div>
-                            <div class="progress-bg"><div class="progress-fill" style="width: {ctrl_prob if treat_pred=='Control' else stress_prob}%;"></div></div>
-                            <div class="progress-labels">
-                                <span>Control {ctrl_prob}%</span>
-                                <span>Stress {stress_prob}%</span>
-                            </div>
-                        </div>
-                    """, unsafe_allow_html=True)
+                    # Save prediction result to session state
+                    pred_result = {
+                        'var_conf': var_conf,
+                        'pred_var': pred_var,
+                        'pred_final_height': pred_final_height,
+                        'pred_leaf_count': pred_leaf_count,
+                        'pred_root_count': pred_root_count,
+                        'pred_root_length': pred_root_length,
+                        'treat_pred': treat_pred,
+                        'ctrl_prob': ctrl_prob,
+                        'stress_prob': stress_prob,
+                        'max_treat_conf': max(ctrl_prob, stress_prob)
+                    }
+                    st.session_state['last_prediction'] = pred_result
+                    st.session_state['prediction_history'].append({
+                        'Accession': accession,
+                        'Treatment': treatment,
+                        'Base_Height': base_height,
+                        'H_Feb04': height_feb4,
+                        'H_Feb14': height_feb14,
+                        'Predicted_Variety': pred_var,
+                        'Var_Conf': f"{var_conf}%",
+                        'Predicted_Final_Height': f"{pred_final_height:.1f} cm",
+                        'Predicted_Stress_Group': treat_pred
+                    })
 
                 except ValueError:
                     st.error("Please enter valid numerical values for all height input fields.")
+                except Exception as ex:
+                    st.error(f"Prediction Error: {ex}")
+
+        # Render stored prediction result if available
+        if st.session_state['last_prediction'] is not None:
+            p = st.session_state['last_prediction']
+            st.markdown(f"""
+                <div class="variety-card">
+                    <span class="confidence-tag">{p['var_conf']}% confidence</span>
+                    <div class="card-label">VARIETY PREDICTION (XGBoost)</div>
+                    <div class="variety-title">{p['pred_var']}</div>
+                </div>
+
+                <div class="trait-card">
+                    <span class="confidence-tag" style="background-color: #f5f5f5; color: #555;">R² 0.84</span>
+                    <div class="card-label">TRAIT PREDICTIONS (MLP Neural Net)</div>
+                    <div class="metric-grid">
+                        <div><div class="metric-val">{p['pred_final_height']:.1f} cm</div><div class="metric-lbl">Final height</div></div>
+                        <div><div class="metric-val">{p['pred_leaf_count']}</div><div class="metric-lbl">Leaf count</div></div>
+                        <div><div class="metric-val">{p['pred_root_count']}</div><div class="metric-lbl">Root count</div></div>
+                        <div><div class="metric-val">{p['pred_root_length']:.1f} cm</div><div class="metric-lbl">Root length</div></div>
+                    </div>
+                </div>
+
+                <div class="treatment-card">
+                    <span class="confidence-tag">{p['max_treat_conf']}% confidence</span>
+                    <div class="card-label">TREATMENT GROUP (XGBoost)</div>
+                    <div class="treatment-title">{p['treat_pred']}</div>
+                    <div class="progress-bg"><div class="progress-fill" style="width: {p['ctrl_prob'] if p['treat_pred']=='Control' else p['stress_prob']}%;"></div></div>
+                    <div class="progress-labels">
+                        <span>Control {p['ctrl_prob']}%</span>
+                        <span>Stress {p['stress_prob']}%</span>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
         else:
             st.info("Enter growth measurements on the left and click **Run Prediction**.")
+
 
 # --- BATCH PAGE ---
 elif st.session_state['page'] == 'Batch':
